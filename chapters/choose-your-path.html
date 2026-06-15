@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Choose Your Path — Mythic Spellbook Player Guide</title>
+<link rel="stylesheet" href="../css/guide.css">
+<style>
+  .topnav a.cur{color:var(--text);background:rgba(168,125,255,.14)}
+  .deck-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:var(--maxw);margin:0 auto}
+  @media(max-width:820px){.deck-grid{grid-template-columns:1fr;max-width:380px}}
+  .hcard{position:relative;cursor:pointer;border:1px solid var(--line);border-radius:18px;overflow:hidden;
+    background:linear-gradient(180deg,var(--surface-2),var(--surface));box-shadow:var(--shadow);
+    transition:transform .35s var(--ease),border-color .35s var(--ease),box-shadow .35s,opacity .35s,filter .35s}
+  .hcard::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;z-index:3;
+    background:linear-gradient(90deg,var(--ember-deep),var(--ember-soft))}
+  .hcard.arc::before{background:linear-gradient(90deg,var(--arcane-deep),var(--arcane-soft))}
+  .hcard .pic{position:relative;height:330px;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;
+    background:radial-gradient(130% 80% at 50% 4%,rgba(255,122,60,.18),transparent 58%),#100b10}
+  .hcard.arc .pic{background:radial-gradient(130% 80% at 50% 4%,rgba(168,125,255,.22),transparent 58%),#0d0a14}
+  .hcard .pic img{height:96%;object-fit:contain;filter:drop-shadow(0 20px 26px rgba(0,0,0,.65));transition:transform .5s var(--ease)}
+  .hcard:hover .pic img{transform:scale(1.05) translateY(-4px)}
+  .hcard .pick{position:absolute;top:14px;right:14px;z-index:3;font-family:'Oswald',sans-serif;text-transform:uppercase;
+    letter-spacing:.18em;font-size:.6rem;color:var(--bg);background:var(--ember-soft);padding:5px 11px;border-radius:999px;
+    opacity:0;transform:translateY(-6px);transition:.3s var(--ease)}
+  .hcard.arc .pick{background:var(--arcane-soft)}
+  .hcard:hover .pick{opacity:1;transform:none}
+  .hcard .info{padding:18px 22px 24px}
+  .hcard .role{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.18em;font-size:.66rem;color:var(--ember-soft);margin-bottom:7px}
+  .hcard.arc .role{color:var(--arcane-soft)}
+  .hcard h3{font-family:'Cinzel',serif;font-weight:700;font-size:1.4rem;color:#fff;line-height:1.05;margin-bottom:12px}
+  .hcard .epi{color:var(--muted);font-size:.96rem;line-height:1.55;font-style:italic}
+  .hcard .open-hint{margin-top:14px;font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.16em;font-size:.66rem;
+    color:var(--faint);display:flex;align-items:center;gap:8px}
+  .hcard:hover{transform:translateY(-7px);border-color:rgba(255,122,60,.4);box-shadow:0 40px 80px -34px rgba(255,122,60,.4)}
+  .hcard.arc:hover{border-color:rgba(168,125,255,.45);box-shadow:0 40px 80px -34px rgba(168,125,255,.45)}
+  .hcard.open{border-color:var(--ember);box-shadow:0 0 0 1px var(--ember),0 30px 70px -30px rgba(255,122,60,.5)}
+  .hcard.arc.open{border-color:var(--arcane);box-shadow:0 0 0 1px var(--arcane),0 30px 70px -30px rgba(168,125,255,.5)}
+  .hcard.dim{opacity:.4;filter:saturate(.65)}
+  .hcard.open .open-hint{color:var(--ember-soft)}
+  .hcard.arc.open .open-hint{color:var(--arcane-soft)}
+
+  /* dossier */
+  .dossier{display:none;max-width:var(--maxw);margin:34px auto 0}
+  .dossier.show{display:block;animation:dfade .55s var(--ease)}
+  @keyframes dfade{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+  .dossier .inner{display:grid;grid-template-columns:330px 1fr;border:1px solid var(--line-2);border-radius:22px;overflow:hidden;
+    background:linear-gradient(180deg,var(--surface-2),var(--surface));box-shadow:var(--shadow)}
+  @media(max-width:840px){.dossier .inner{grid-template-columns:1fr}}
+  .dossier .port{position:relative;display:flex;align-items:flex-end;justify-content:center;border-right:1px solid var(--line);
+    background:radial-gradient(110% 70% at 50% 0%,rgba(255,122,60,.2),transparent 60%),#0f0a10;min-height:440px}
+  .dossier.arc .port{background:radial-gradient(110% 70% at 50% 0%,rgba(168,125,255,.26),transparent 60%),#0c0914;border-right-color:var(--line)}
+  @media(max-width:840px){.dossier .port{border-right:none;border-bottom:1px solid var(--line);min-height:360px}}
+  .dossier .port img{height:430px;max-height:92%;object-fit:contain;filter:drop-shadow(0 24px 30px rgba(0,0,0,.7))}
+  @media(max-width:840px){.dossier .port img{height:340px}}
+  .dossier .txt{padding:38px 42px 40px}
+  @media(max-width:560px){.dossier .txt{padding:28px 24px}}
+  .dossier .txt .role{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.24em;font-size:.72rem;color:var(--ember-soft);margin-bottom:8px}
+  .dossier.arc .txt .role{color:var(--arcane-soft)}
+  .dossier .txt h2{font-family:'Cinzel',serif;font-weight:800;font-size:clamp(1.7rem,3.4vw,2.5rem);color:#fff;margin-bottom:18px;line-height:1.04}
+  .dossier .statbar{display:flex;flex-wrap:wrap;gap:14px;padding:16px 0 22px;margin-bottom:6px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .dossier .sx{display:flex;flex-direction:column;gap:3px;padding-right:14px}
+  .dossier .sx .l{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.16em;font-size:.58rem;color:var(--faint)}
+  .dossier .sx .v{font-family:'Cinzel',serif;font-weight:700;font-size:1.05rem;color:#fff}
+  .dossier .sx .v.em{color:var(--ember-soft)}.dossier .sx .v.ar{color:var(--arcane-soft)}
+  .dossier .bio{margin-top:22px}
+  .dossier .bio p{margin:0 0 1.05rem;color:#cdc6d4;font-size:1.02rem;line-height:1.7}
+  .dossier .bio p:first-child{font-size:1.1rem;color:#e4dde9}
+  .deckhead{text-align:center;max-width:760px;margin:0 auto 44px}
+</style>
+</head>
+<body>
+<div class="progress"></div>
+
+<header class="topbar"><div class="inner">
+  <a class="brand" href="../index.html"><span class="sigil"></span><span>Mythic Spellbook<small>Player Guide</small></span></a>
+  <nav class="topnav">
+    <a class="home" href="../index.html">Contents</a>
+    <a class="cur lbl" href="choose-your-path.html">01 · Path</a>
+    <a class="lbl" href="the-heroes.html">02 · Heroes</a>
+    <a class="lbl" href="kalon-source.html">03 · Kalon</a>
+    <a class="lbl" href="build-your-collection.html">04 · Cards</a>
+    <a class="lbl" href="the-living-world.html">05 · World</a>
+    <a class="lbl" href="the-survivors-edge.html">06 · Survival</a>
+  </nav>
+</div></header>
+
+<header class="phead">
+  <div class="wrap">
+    <div class="num">01</div>
+    <p class="eyebrow">Chapter One</p>
+    <h1>Choose Your Path</h1>
+    <p class="sub">Your deck is only one part of your story. Begin the adventure by choosing the path that's right for you.</p>
+    <div class="glowline"></div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="prose">
+      <p class="lead reveal"><span class="term">Mythic Spellbook</span> is unlike any deckbuilding game you've ever played. While most deckbuilders focus solely on collecting cards and building powerful decks, Mythic Spellbook goes far beyond the battlefield. Every card you collect and every decision you make contributes to a <em>living world</em> where your actions shape your future.</p>
+      <p class="reveal d1">As you play, you'll earn <span class="term">Cinder</span> — the game's primary currency — but your journey doesn't stop there. You'll manage and grow a survivor camp, take care of your population, train the units in your deck, expand your base, and build a thriving operation. Players can own businesses, make investments, send units on missions, fuse units into stronger forms, gather resources, and unlock countless opportunities to grow both their power and their economy.</p>
+    </div>
+    <div class="note reveal d1">
+      <span class="k">Remember</span>
+      Your deck is only one part of your story. The adventure begins by choosing your <strong>Starter Deck</strong> — each offering a unique playstyle, strategy, and path forward. Your choice will shape your early journey and determine how you approach the challenges ahead.
+    </div>
+  </div>
+</section>
+
+<div class="spacer"></div>
+
+<section>
+  <div class="wrap">
+    <div class="deckhead reveal">
+      <p class="eyebrow arc">The First Three Starter Decks</p>
+      <h2 style="font-size:clamp(1.7rem,4vw,2.5rem);color:#fff">Meet Your Heroes</h2>
+      <p class="muted" style="margin-top:14px">Each starter is led by a Hero with their own history, fighting style, and source of power. Select one to read their full dossier.</p>
+    </div>
+
+    <div class="deck-grid">
+      <article class="hcard" data-hero="cedric">
+        <span class="pick">Select</span>
+        <div class="pic"><img src="../assets/cedric.png" alt="Sir Cedric"></div>
+        <div class="info">
+          <div class="role">Physical · Ranger</div>
+          <h3>Sir Cedric</h3>
+          <p class="epi">A decorated war hero and master of ranged combat — the unbreakable shield of Camp Heights.</p>
+          <div class="open-hint">Read dossier <span>→</span></div>
+        </div>
+      </article>
+
+      <article class="hcard" data-hero="vex">
+        <span class="pick">Select</span>
+        <div class="pic"><img src="../assets/vex.png" alt="Vex Nightblade"></div>
+        <div class="info">
+          <div class="role">Physical · Assassin</div>
+          <h3>Vex Nightblade</h3>
+          <p class="epi">A legendary hired killer who always finishes the job — twin blades, no firearms, no mercy.</p>
+          <div class="open-hint">Read dossier <span>→</span></div>
+        </div>
+      </article>
+
+      <article class="hcard arc" data-hero="lyra">
+        <span class="pick">Select</span>
+        <div class="pic"><img src="../assets/lyra.png" alt="Lyra the Wise"></div>
+        <div class="info">
+          <div class="role">Magical · Mage</div>
+          <h3>Lyra the Wise</h3>
+          <p class="epi">The first survivor of an anomaly-class event, awakened by the Book of Abra itself.</p>
+          <div class="open-hint">Read dossier <span>→</span></div>
+        </div>
+      </article>
+    </div>
+
+    <!-- DOSSIERS -->
+    <div class="dossier" data-dossier="cedric">
+      <div class="inner">
+        <div class="port"><img src="../assets/cedric.png" alt="Sir Cedric"></div>
+        <div class="txt">
+          <div class="role">Starter Deck · Physical Ranger</div>
+          <h2>Sir Cedric</h2>
+          <div class="statbar">
+            <div class="sx"><span class="l">Type</span><span class="v em">Physical</span></div>
+            <div class="sx"><span class="l">Role</span><span class="v">Ranger</span></div>
+            <div class="sx"><span class="l">Specialty</span><span class="v">Ranged Combat</span></div>
+            <div class="sx"><span class="l">Base Health</span><span class="v">50</span></div>
+            <div class="sx"><span class="l">Home</span><span class="v">Camp Heights</span></div>
+          </div>
+          <div class="bio">
+            <p>Sir Cedric is one of the primary defenders of Camp Heights and a master of ranged combat. A decorated veteran of World War III, Cedric earned his Purple Heart through extraordinary bravery and sacrifice.</p>
+            <p>During the war, an allied village near a critical United States military base came under attack by an overwhelming enemy force. With the village on the brink of collapse, Cedric and his platoon of only thirteen soldiers stood their ground against more than one hundred attackers. Before the battle began, Cedric made a promise to his squad: they would protect the village and bring everyone home alive.</p>
+            <p>For seven relentless hours, Cedric and his soldiers defended the settlement through constant gunfire, coordinated assaults, and impossible odds. Using superior tactics, battlefield awareness, and quick decision-making, Cedric led the defense — saving both the villagers and every member of his platoon.</p>
+            <p>As the battle ended, a hidden sniper fired a shot that struck Cedric in the knee. The injury caused him to collapse from exhaustion and blood loss moments after victory had been secured.</p>
+            <p>News of his heroic stand spread across the nation. For his courage, leadership, and unwavering commitment to protecting innocent lives, Cedric was honored as a national hero and granted the prestigious title of <em>Sir</em>. To this day, Sir Cedric continues to defend Camp Heights — a symbol of courage, sacrifice, and the promise that no one under his protection will be left behind.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dossier" data-dossier="vex">
+      <div class="inner">
+        <div class="port"><img src="../assets/vex.png" alt="Vex Nightblade"></div>
+        <div class="txt">
+          <div class="role">Starter Deck · Physical Assassin</div>
+          <h2>Vex Nightblade</h2>
+          <div class="statbar">
+            <div class="sx"><span class="l">Type</span><span class="v em">Physical</span></div>
+            <div class="sx"><span class="l">Role</span><span class="v">Assassin</span></div>
+            <div class="sx"><span class="l">Weapons</span><span class="v">Adam &amp; Eve</span></div>
+            <div class="sx"><span class="l">Base Health</span><span class="v">50</span></div>
+            <div class="sx"><span class="l">Title</span><span class="v">Nightblade</span></div>
+          </div>
+          <div class="bio">
+            <p>A legendary hired killer — it is said that the moment Vex is given your name, your fate is already sealed. To many, death does not arrive when they see him. It arrives the moment the contract is accepted.</p>
+            <p>Recruited and trained by the United States government from the age of five, Vex was forged into the perfect assassin. He was taught to infiltrate any environment, adapt to any situation, and eliminate any target regardless of the odds. No battlefield was too dangerous, no mission too impossible.</p>
+            <p>Vex earned the title <em>Nightblade</em> for one simple reason: he refused to use firearms. Instead, he carried two deadly blades known as Adam and Eve. Throughout countless operations, those blades never failed him — whether facing rogue gangs, hostile warlords, or supernatural anomalies that defied reality itself.</p>
+            <p>Now residing in Camp Heights, Vex Nightblade serves as the settlement's most feared bounty hunter. Criminals, monsters, and even beings from beyond the known realms know his name — and fear it. For Vex, it does not matter whether his target is human, mutant, anomaly, or godlike entity.</p>
+            <p>Once the hunt begins, there is only one outcome. <strong>Vex Nightblade always finishes the job.</strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dossier arc" data-dossier="lyra">
+      <div class="inner">
+        <div class="port"><img src="../assets/lyra.png" alt="Lyra the Wise"></div>
+        <div class="txt">
+          <div class="role">Starter Deck · Magical Mage</div>
+          <h2>Lyra the Wise</h2>
+          <div class="statbar">
+            <div class="sx"><span class="l">Type</span><span class="v ar">Magical</span></div>
+            <div class="sx"><span class="l">Role</span><span class="v">Mage</span></div>
+            <div class="sx"><span class="l">Power</span><span class="v">Abra Magic</span></div>
+            <div class="sx"><span class="l">Base Health</span><span class="v">50</span></div>
+            <div class="sx"><span class="l">Lineage</span><span class="v">Daughter of Cedric</span></div>
+          </div>
+          <div class="bio">
+            <p>Lyra, the daughter of Sir Cedric, has always been fascinated by books, history, and the lost knowledge of the old world. In an age where artificial intelligence had replaced most forms of learning, reading had become a forgotten skill possessed by only a handful of survivors.</p>
+            <p>When rumors spread of an ancient artifact known as the <em>Book of Abra</em>, Lyra joined an expedition deep into a remote cave system to recover it. After weeks of searching, the team finally discovered the legendary book — yet not even the world's greatest scholars could decipher its strange symbols or understand the language written within its pages.</p>
+            <p>Fearing rival nations might uncover its secrets first, the remaining leaders of America secured the artifact for study. Before it could be moved, Lyra found the book resting on a commander's desk. As she approached, words upon the pages began to glow with golden light. To everyone else the pages remained unreadable — but to Lyra the text was perfectly clear, as if the book had been waiting for her alone. Unable to resist its call, she began reading the ancient words aloud.</p>
+            <p>The moment the final sentence left her lips, a massive wave of energy erupted from the book, tearing through the camp in a brilliant explosion of light. Buildings shook, alarms blared, and survivors feared the worst. Yet when the dust settled, not a single person had been harmed. Lyra, however, had been forever changed.</p>
+            <p>The ancient power of Abra had awakened within her — making her the first known survivor of an anomaly-class event in Camp Heights. Now wielding the mysterious force known as <em>Abra Magic</em>, Lyra stands as living proof that some secrets of the old world were never meant to be forgotten. Many believe she was chosen by the Book of Abra itself. Others fear what may happen if she ever unlocks its true power.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<nav class="pnav">
+  <a class="prev" href="../index.html"><span class="dir">← Back to</span><span class="t">Contents</span></a>
+  <a class="next" href="the-heroes.html"><span class="dir">Chapter Two →</span><span class="t">The Heroes &amp; The Battlefield</span></a>
+</nav>
+
+<footer class="foot">Mythic Spellbook · Player Guide — updated as the world grows</footer>
+
+<script src="../js/guide.js"></script>
+</body>
+</html>

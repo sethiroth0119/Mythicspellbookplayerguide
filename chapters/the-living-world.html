@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Living World — Mythic Spellbook Player Guide</title>
+<link rel="stylesheet" href="../css/guide.css">
+<style>
+  .topnav a.cur{color:var(--text);background:rgba(168,125,255,.14)}
+  .sec-head{max-width:var(--read);margin:0 auto 26px}
+  .sec-head h2{font-size:clamp(1.6rem,3.6vw,2.3rem);color:#fff;margin-bottom:10px}
+  .sec-head .eyebrow{margin-bottom:14px}
+
+  /* camp pillars */
+  .pillars{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;max-width:var(--maxw);margin:0 auto}
+  @media(max-width:900px){.pillars{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.pillars{grid-template-columns:1fr}}
+  .pillar{position:relative;border:1px solid var(--line);border-radius:16px;padding:26px 22px;
+    background:linear-gradient(180deg,var(--surface-2),var(--surface));transition:transform .35s var(--ease),border-color .35s}
+  .pillar:hover{transform:translateY(-6px);border-color:var(--line-2)}
+  .pillar .pn{font-family:'Cinzel',serif;font-weight:900;font-size:1.1rem;color:var(--arcane-soft);
+    width:40px;height:40px;display:grid;place-items:center;border-radius:11px;border:1px solid rgba(168,125,255,.3);
+    background:rgba(168,125,255,.08);margin-bottom:16px}
+  .pillar h4{font-family:'Cinzel',serif;font-weight:700;font-size:1.12rem;color:#fff;margin:0 0 8px;line-height:1.1}
+  .pillar p{margin:0;color:var(--muted);font-size:.94rem;line-height:1.55}
+
+  /* district nodes diagram */
+  .nodes{display:grid;grid-template-columns:1fr auto 1fr;gap:clamp(16px,4vw,40px);align-items:center;
+    max-width:var(--maxw);margin:0 auto;padding:36px clamp(20px,4vw,42px);border-radius:22px;border:1px solid var(--line);
+    box-shadow:var(--shadow);background:radial-gradient(120% 90% at 50% 0%,rgba(168,125,255,.12),transparent 62%),linear-gradient(180deg,var(--surface-2),var(--surface))}
+  @media(max-width:680px){.nodes{grid-template-columns:1fr;text-align:center;gap:22px}}
+  .nodes .camp-node{display:flex;flex-direction:column;align-items:center;gap:12px}
+  .nodes .camp-node .glyph{width:84px;height:84px;border-radius:18px;display:grid;place-items:center;
+    font-family:'Cinzel',serif;font-weight:900;font-size:1.8rem;color:#fff;
+    background:radial-gradient(circle at 50% 36%,var(--arcane-soft),var(--arcane) 55%,var(--arcane-deep));
+    box-shadow:0 0 30px var(--arcane-glow)}
+  .nodes .camp-node .lab{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.18em;font-size:.66rem;color:#fff}
+  .nodes .camp-node .sub{font-size:.86rem;color:var(--muted)}
+  .nodes .exch{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:120px}
+  .nodes .exch .x{font-size:1.8rem;color:var(--ember-soft);line-height:1}
+  .nodes .exch .xl{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.14em;font-size:.58rem;color:var(--faint);text-align:center}
+  .nodes .node-stack{display:flex;flex-direction:column;gap:10px}
+  @media(max-width:680px){.nodes .node-stack{align-items:center}}
+  .node-chip{display:flex;align-items:center;gap:11px;padding:13px 17px;border-radius:13px;border:1px solid var(--line-2);
+    background:rgba(255,255,255,.02);min-width:200px}
+  .node-chip .d{width:9px;height:9px;border-radius:50%;background:var(--ember);box-shadow:0 0 8px var(--ember-glow);flex:0 0 auto}
+  .node-chip b{color:#fff;font-family:'Cinzel',serif;font-weight:600;font-size:.96rem}
+  .exchange-cols{display:grid;grid-template-columns:1fr 1fr;gap:18px;max-width:var(--maxw);margin:24px auto 0}
+  @media(max-width:560px){.exchange-cols{grid-template-columns:1fr}}
+  .ecol{border:1px solid var(--line);border-radius:14px;padding:20px 22px;background:linear-gradient(180deg,var(--surface-2),var(--surface))}
+  .ecol h5{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.18em;font-size:.66rem;margin:0 0 8px}
+  .ecol.give h5{color:var(--arcane-soft)}.ecol.get h5{color:var(--ember-soft)}
+  .ecol p{margin:0;color:var(--muted);font-size:.98rem;line-height:1.55}
+
+  /* build chips + morale */
+  .buildgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;max-width:var(--maxw);margin:0 auto}
+  @media(max-width:760px){.buildgrid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:440px){.buildgrid{grid-template-columns:1fr}}
+  .buildgrid .bc{border:1px solid var(--line);border-radius:14px;padding:20px;background:linear-gradient(180deg,var(--surface-2),var(--surface))}
+  .buildgrid .bc h4{font-family:'Cinzel',serif;font-weight:700;font-size:1.02rem;color:#fff;margin:0 0 6px}
+  .buildgrid .bc p{margin:0;color:var(--muted);font-size:.9rem;line-height:1.5}
+  .morale{max-width:var(--read);margin:30px auto 0}
+  .morale .bar{height:16px;border-radius:999px;overflow:hidden;border:1px solid var(--line-2);display:flex;background:rgba(0,0,0,.3)}
+  .morale .bar i{flex:1;background:linear-gradient(90deg,var(--ember),var(--gold))}
+  .morale .needs{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px;justify-content:center}
+
+  /* economy roles */
+  .roles{display:flex;flex-wrap:wrap;gap:11px;justify-content:center;max-width:760px;margin:28px auto 0}
+  .role-chip{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:.74rem;
+    padding:9px 16px;border-radius:999px;border:1px solid var(--line-2);color:var(--text);background:rgba(255,255,255,.02)}
+
+  /* no-crypto callout */
+  .nocrypto{max-width:var(--maxw);margin:0 auto;padding:40px clamp(24px,4vw,48px);border-radius:22px;text-align:center;
+    border:1px solid rgba(255,122,60,.3);box-shadow:var(--shadow);
+    background:radial-gradient(120% 100% at 50% 0%,rgba(255,122,60,.12),transparent 60%),linear-gradient(180deg,var(--surface-2),var(--surface))}
+  .nocrypto .neg{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-bottom:24px}
+  .nocrypto .neg span{font-family:'Cinzel',serif;font-weight:700;font-size:1.05rem;color:var(--muted);
+    padding:10px 20px;border-radius:12px;border:1px solid var(--line-2);position:relative}
+  .nocrypto .neg span::after{content:"";position:absolute;left:14%;right:14%;top:50%;height:2px;background:var(--ember);transform:rotate(-7deg);opacity:.7}
+  .nocrypto h3{font-family:'Cinzel',serif;font-weight:800;font-size:clamp(1.4rem,3vw,2rem);color:#fff;margin:0 0 14px}
+  .nocrypto p{max-width:620px;margin:0 auto;color:#cfc7d6;font-size:1.05rem;line-height:1.66}
+
+  /* price factors */
+  .factors{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;max-width:var(--maxw);margin:30px auto 0}
+  @media(max-width:760px){.factors{grid-template-columns:repeat(2,1fr)}}
+  .factor{display:flex;align-items:center;gap:10px;padding:14px 16px;border-radius:12px;border:1px solid var(--line);
+    background:linear-gradient(180deg,var(--surface-2),var(--surface));color:#d8d1e0;font-size:.94rem}
+  .factor .fd{width:7px;height:7px;border-radius:50%;background:var(--arcane);box-shadow:0 0 8px var(--arcane-glow);flex:0 0 auto}
+</style>
+</head>
+<body>
+<div class="progress"></div>
+
+<header class="topbar"><div class="inner">
+  <a class="brand" href="../index.html"><span class="sigil"></span><span>Mythic Spellbook<small>Player Guide</small></span></a>
+  <nav class="topnav">
+    <a class="home" href="../index.html">Contents</a>
+    <a class="lbl" href="choose-your-path.html">01 · Path</a>
+    <a class="lbl" href="the-heroes.html">02 · Heroes</a>
+    <a class="lbl" href="kalon-source.html">03 · Kalon</a>
+    <a class="lbl" href="build-your-collection.html">04 · Cards</a>
+    <a class="cur lbl" href="the-living-world.html">05 · World</a>
+    <a class="lbl" href="the-survivors-edge.html">06 · Survival</a>
+  </nav>
+</div></header>
+
+<header class="phead">
+  <div class="wrap">
+    <div class="num">05</div>
+    <p class="eyebrow arc">Chapter Five</p>
+    <h1>The Living World</h1>
+    <p class="sub">Winning battles is only one part of your story. Beyond the board lies a camp to lead, an economy to master, and a future to build.</p>
+    <div class="glowline"></div>
+  </div>
+</header>
+
+<!-- INTRO -->
+<section>
+  <div class="wrap">
+    <div class="prose">
+      <p class="lead reveal">Your Camp is what separates ordinary survivors from those who truly <em>thrive</em> in Ethos Heights. While winning battles matters, the most successful survivors understand that <span class="term">Mythic Spellbook</span> is far more than a trading card game.</p>
+      <p class="reveal d1">From the beginning, the goal was to create a living, breathing world where your cards are more than collectibles — they are real inhabitants, each with their own purpose, growth, and story. Your Units live in your Camp, work within your community, and help shape your journey.</p>
+    </div>
+    <div class="note arc reveal d1">
+      <span class="k">Ethos Heights</span>
+      After the end of the world, the ruins of New York were rebuilt and renamed <strong>Ethos Heights</strong> — a fallen city reborn as a place of opportunity, danger, exploration, and discovery. A world that keeps existing long after the battle ends.
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+<div class="spacer"></div>
+
+<!-- YOUR CAMP -->
+<section>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">The Center of Operations</p>
+      <h2>Your Camp</h2>
+      <p class="muted" style="margin-top:8px">The decisions you make in your Camp can matter just as much as the choices you make in battle.</p>
+    </div>
+    <div class="pillars reveal d1">
+      <div class="pillar"><div class="pn">01</div><h4>Manage Resources</h4><p>Stockpile, allocate, and spend the materials that keep your settlement running.</p></div>
+      <div class="pillar"><div class="pn">02</div><h4>Train Units</h4><p>Develop your allies between battles so they return to the field stronger.</p></div>
+      <div class="pillar"><div class="pn">03</div><h4>Grow the Economy</h4><p>Run businesses, invest, and turn a small outpost into a thriving operation.</p></div>
+      <div class="pillar"><div class="pn">04</div><h4>Prepare Expeditions</h4><p>Outfit your survivors and plan the runs that bring rare loot home.</p></div>
+      <div class="pillar"><div class="pn">05</div><h4>Build the Foundation</h4><p>Lay the groundwork for everything your future success will be built on.</p></div>
+    </div>
+    <div class="note reveal">
+      <span class="k">The Quiet Truth</span>
+      The strongest survivors aren't always the ones who win the most matches — they're often the ones who build the most efficient camps, develop their Units, and seize the opportunities Ethos Heights has to offer.
+    </div>
+  </div>
+</section>
+
+<div class="spacer"></div>
+
+<!-- DISTRICT NODES -->
+<section>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow arc">Partnerships</p>
+      <h2>District Nodes</h2>
+      <p class="muted" style="margin-top:8px">One of the strongest ways to grow your camp is by forming partnerships with nearby communities.</p>
+    </div>
+    <div class="nodes reveal d1">
+      <div class="camp-node">
+        <div class="glyph">⌂</div>
+        <span class="lab">Your Camp</span>
+        <span class="sub">Leader &amp; protector</span>
+      </div>
+      <div class="exch">
+        <span class="x">⇄</span>
+        <span class="xl">Trade Agreement</span>
+      </div>
+      <div class="node-stack">
+        <div class="node-chip"><span class="d"></span><b>District Node</b></div>
+        <div class="node-chip"><span class="d"></span><b>District Node</b></div>
+        <div class="node-chip"><span class="d"></span><b>District Node</b></div>
+      </div>
+    </div>
+    <div class="exchange-cols reveal">
+      <div class="ecol give"><h5>You Provide</h5><p>Safety and stability — protecting nearby nodes and their populations from the dangers beyond the walls.</p></div>
+      <div class="ecol get"><h5>You Receive</h5><p>Trade agreements that generate valuable resources, materials, and revenue for your camp.</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="spacer"></div>
+
+<!-- BUILD & MORALE -->
+<section>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Expansion</p>
+      <h2>Build, Expand &amp; Keep Morale High</h2>
+      <p class="muted" style="margin-top:8px">Your camp is fully interactive and grows over time — but a growing camp needs a happy population.</p>
+    </div>
+    <div class="buildgrid reveal d1">
+      <div class="bc"><h4>Construct</h4><p>Raise new buildings to expand what your camp can do.</p></div>
+      <div class="bc"><h4>Repair</h4><p>Restore damaged structures after the chaos of the wasteland.</p></div>
+      <div class="bc"><h4>Hire Guards</h4><p>Protect your citizens and keep the settlement secure.</p></div>
+      <div class="bc"><h4>Invest</h4><p>Fund facilities that improve production and quality of life.</p></div>
+    </div>
+    <div class="morale reveal">
+      <div class="bar"><i></i></div>
+      <div class="needs">
+        <span class="tag gold">Safety</span><span class="tag gold">Jobs</span><span class="tag gold">Resources</span><span class="tag gold">Hope</span>
+      </div>
+    </div>
+    <div class="note reveal">
+      <span class="k">Mind the Morale</span>
+      Citizens want safety, jobs, resources, and hope for the future. If morale declines, your population may leave for better opportunities at nearby District Nodes — and a shrinking population means fewer workers, reduced production, and slower growth. A strong camp creates strong survivors.
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+<div class="spacer"></div>
+
+<!-- ECONOMY -->
+<section>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow arc">A Player-Driven World</p>
+      <h2>The Economy</h2>
+    </div>
+    <div class="prose">
+      <p class="lead reveal">Battling other players is only one part of the experience. Mythic Spellbook was built as a <span class="term arc">player-driven economy</span> — a living world where cooperation, leadership, and economic decisions matter just as much as winning battles.</p>
+      <p class="reveal d1">Throughout your journey you'll take part in supply and demand, trade resources, manage businesses, invest in opportunities, and lead your own camp. The economy isn't separate from the game — it <em>is</em> the game. The resources you gather, the businesses you run, and the relationships you build all feed your camp's success.</p>
+    </div>
+    <div class="sec-head reveal" style="margin-top:18px;text-align:center">
+      <p class="muted">There are many paths to success — choose the role that fits you.</p>
+    </div>
+    <div class="roles reveal d1">
+      <span class="role-chip">Competitor</span>
+      <span class="role-chip">Trader</span>
+      <span class="role-chip">Investor</span>
+      <span class="role-chip">Builder</span>
+      <span class="role-chip">Business Owner</span>
+      <span class="role-chip">Community Leader</span>
+    </div>
+  </div>
+</section>
+
+<div class="spacer"></div>
+
+<!-- TRADING -->
+<section>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Buying · Selling · Trading</p>
+      <h2>A True Trading Platform</h2>
+    </div>
+    <div class="nocrypto reveal d1">
+      <div class="neg"><span>No Blockchain</span><span>No NFTs</span><span>No Crypto</span></div>
+      <h3>Built Entirely Within Mythic Spellbook</h3>
+      <p>Mythic Spellbook is a full digital trading platform — but trading, ownership, and the economy operate entirely within its own ecosystem, never dependent on crypto assets or blockchain systems. Survivors buy, sell, trade, and negotiate directly with one another, exchanging cards, resources, businesses, and services as they expand their influence.</p>
+    </div>
+    <div class="prose">
+      <p class="reveal" style="margin-top:38px">In Ethos Heights, nearly everything has value — and prices are never fixed forever. The worth of an asset rises and falls with the world around it:</p>
+    </div>
+    <div class="factors reveal d1">
+      <div class="factor"><span class="fd"></span>Supply &amp; demand</div>
+      <div class="factor"><span class="fd"></span>World events</div>
+      <div class="factor"><span class="fd"></span>Resource shortages</div>
+      <div class="factor"><span class="fd"></span>New discoveries</div>
+      <div class="factor"><span class="fd"></span>Node development</div>
+      <div class="factor"><span class="fd"></span>Camp growth</div>
+      <div class="factor"><span class="fd"></span>Seasonal content</div>
+      <div class="factor"><span class="fd"></span>Community activity</div>
+    </div>
+    <div class="note arc reveal">
+      <span class="k">Your Decisions Shape the Market</span>
+      A resource that's common today may be highly sought after tomorrow; a card few players use may spike in value the moment a new strategy is discovered. Every trade, investment, and business decision feeds a larger ecosystem driven by the community itself.
+    </div>
+  </div>
+</section>
+
+<nav class="pnav">
+  <a class="prev" href="build-your-collection.html"><span class="dir">← Chapter Four</span><span class="t">Build Your Collection</span></a>
+  <a class="next" href="the-survivors-edge.html"><span class="dir">Chapter Six →</span><span class="t">The Survivor's Edge</span></a>
+</nav>
+
+<footer class="foot">Mythic Spellbook · Player Guide — updated as the world grows</footer>
+
+<script src="../js/guide.js"></script>
+</body>
+</html>

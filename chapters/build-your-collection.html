@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build Your Collection — Mythic Spellbook Player Guide</title>
+<link rel="stylesheet" href="../css/guide.css">
+<style>
+  .topnav a.cur{color:var(--text);background:rgba(168,125,255,.14)}
+  .sec-head{max-width:var(--read);margin:0 auto 26px}
+  .sec-head h2{font-size:clamp(1.6rem,3.6vw,2.3rem);color:#fff;margin-bottom:10px}
+  .sec-head .eyebrow{margin-bottom:14px}
+
+  .type-gallery{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;max-width:var(--maxw);margin:0 auto}
+  @media(max-width:900px){.type-gallery{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:480px){.type-gallery{grid-template-columns:repeat(2,1fr)}}
+  .tcard{position:relative;border-radius:13px;padding:8px;border:1px solid var(--line);background:linear-gradient(180deg,var(--surface-2),var(--surface));
+    transition:transform .35s var(--ease),border-color .35s var(--ease),box-shadow .35s}
+  .tcard img{width:100%;display:block;filter:drop-shadow(0 8px 16px rgba(0,0,0,.5))}
+  .tcard:hover{transform:translateY(-8px);border-color:var(--line-2);box-shadow:0 30px 60px -28px rgba(168,125,255,.4)}
+  .tcard .badge{position:absolute;top:-9px;left:50%;transform:translateX(-50%);white-space:nowrap;
+    font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.14em;font-size:.56rem;
+    padding:4px 10px;border-radius:999px;background:var(--surface-3);border:1px solid var(--line-2);color:var(--faint)}
+  .tcard.known{border-color:rgba(255,122,60,.45)}
+  .tcard.known .badge{background:var(--ember);color:#1a0d05;border-color:var(--ember)}
+  .tcard.known:hover{box-shadow:0 30px 60px -28px rgba(255,122,60,.45)}
+  .tcard.soon img{filter:drop-shadow(0 8px 16px rgba(0,0,0,.5)) grayscale(.35) brightness(.8)}
+  .tcard.soon::after{content:"?";position:absolute;inset:0;display:grid;place-items:center;font-family:'Cinzel',serif;
+    font-weight:800;font-size:2.4rem;color:rgba(255,255,255,.18);pointer-events:none}
+  .gallery-cap{text-align:center;color:var(--muted);max-width:640px;margin:30px auto 0;font-size:1rem}
+
+  /* trap feature */
+  .trap{display:grid;grid-template-columns:280px 1fr;gap:48px;align-items:center;max-width:var(--maxw);margin:0 auto}
+  @media(max-width:720px){.trap{grid-template-columns:1fr;justify-items:center;text-align:center}}
+  .trap .cardimg{border-radius:14px;overflow:hidden;border:1px solid var(--line-2);
+    box-shadow:0 30px 60px -18px rgba(0,0,0,.75);position:relative}
+  .trap .cardimg img{width:280px;display:block}
+  .trap .cardimg::before{content:"";position:absolute;inset:0;border-radius:14px;box-shadow:inset 0 0 60px rgba(120,90,170,.25);pointer-events:none}
+  .trap .meta .ctype{display:inline-block;font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.18em;
+    font-size:.66rem;color:var(--arcane-soft);border:1px solid rgba(168,125,255,.4);padding:5px 13px;border-radius:999px;margin-bottom:16px}
+  .trap .meta h3{font-family:'Cinzel',serif;font-weight:800;font-size:clamp(1.8rem,4vw,2.6rem);color:#fff;margin:0 0 16px}
+  .trap .meta p{color:#cfc7d6;font-size:1.12rem;line-height:1.66;margin:0 0 14px;max-width:460px}
+  .trap .meta .micro{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.16em;font-size:.66rem;color:var(--faint)}
+
+  /* coming soon */
+  .soon-block{max-width:var(--read);margin:0 auto;text-align:center;padding:50px 34px;border-radius:20px;
+    border:1px dashed var(--line-2);background:linear-gradient(180deg,rgba(168,125,255,.05),transparent)}
+  .soon-block .ico{font-family:'Cinzel',serif;font-weight:800;font-size:2rem;color:var(--arcane-soft);margin-bottom:14px}
+  .soon-block h3{font-family:'Cinzel',serif;font-weight:700;font-size:1.5rem;color:#fff;margin:0 0 12px}
+  .soon-block p{color:var(--muted);margin:0 auto;max-width:480px}
+  .soon-dots{display:flex;gap:8px;justify-content:center;margin-top:22px}
+  .soon-dots span{width:7px;height:7px;border-radius:50%;background:var(--arcane);opacity:.4;animation:blink 1.6s ease-in-out infinite}
+  .soon-dots span:nth-child(2){animation-delay:.25s}.soon-dots span:nth-child(3){animation-delay:.5s}
+  @keyframes blink{0%,100%{opacity:.25}50%{opacity:1}}
+
+  section[id]{scroll-margin-top:88px}
+  .tcard.known.arc{border-color:rgba(168,125,255,.5)}
+  .tcard.known.arc .badge{background:var(--arcane);color:#160a2b;border-color:var(--arcane)}
+  .tcard.known.arc:hover{box-shadow:0 30px 60px -28px rgba(168,125,255,.5)}
+
+  /* generalized card-type feature */
+  .typefeat{display:grid;grid-template-columns:262px 1fr;gap:48px;align-items:center;max-width:var(--maxw);margin:0 auto}
+  .typefeat.rev{grid-template-columns:1fr 262px}
+  .typefeat.rev .tf-card{order:2}
+  @media(max-width:760px){.typefeat,.typefeat.rev{grid-template-columns:1fr;justify-items:center;text-align:center}.typefeat.rev .tf-card{order:0}}
+  .tf-card{border-radius:14px;overflow:hidden;border:1px solid var(--line-2);box-shadow:0 30px 60px -18px rgba(0,0,0,.75);position:relative;width:262px;flex:0 0 auto}
+  .tf-card img{width:262px;display:block}
+  .tf-card::before{content:"";position:absolute;inset:0;border-radius:14px;pointer-events:none;box-shadow:inset 0 0 60px rgba(120,90,170,.22)}
+  .tf-meta .ctype{display:inline-block;font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.18em;font-size:.66rem;
+    color:var(--arcane-soft);border:1px solid rgba(168,125,255,.4);padding:5px 13px;border-radius:999px;margin-bottom:16px}
+  .tf-meta.ember .ctype{color:var(--ember-soft);border-color:rgba(255,122,60,.4)}
+  .tf-meta.gold .ctype{color:var(--gold);border-color:rgba(227,183,101,.4)}
+  .tf-meta h3{font-family:'Cinzel',serif;font-weight:800;font-size:clamp(1.6rem,3.6vw,2.3rem);color:#fff;margin:0 0 16px;line-height:1.05}
+  .tf-meta p{color:#cfc7d6;font-size:1.06rem;line-height:1.66;margin:0 0 14px;max-width:520px}
+  @media(max-width:760px){.tf-meta p{margin-inline:auto}}
+  .tf-meta .micro{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.16em;font-size:.64rem;color:var(--faint);margin-top:4px}
+
+  /* spell subtypes */
+  .subtypes{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;max-width:760px;margin:30px auto 0}
+  @media(max-width:560px){.subtypes{grid-template-columns:1fr}}
+  .subt{border:1px solid var(--line);border-radius:14px;padding:18px 20px;background:linear-gradient(180deg,var(--surface-2),var(--surface))}
+  .subt h4{font-family:'Cinzel',serif;font-weight:700;font-size:1.1rem;color:#fff;margin:0 0 9px}
+  .subt p{margin:0;color:var(--muted);font-size:.95rem;line-height:1.55}
+
+  /* unit traits */
+  .traits{display:flex;flex-wrap:wrap;gap:9px;margin:6px 0 18px;max-width:520px}
+  @media(max-width:760px){.traits{justify-content:center;margin-inline:auto}}
+
+  /* archon summon */
+  .summon{display:grid;grid-template-columns:1fr 1fr;gap:22px;max-width:var(--maxw);margin:32px auto 0}
+  @media(max-width:760px){.summon{grid-template-columns:1fr}}
+  .obox{border:1px solid var(--line-2);border-radius:18px;padding:26px 28px;background:linear-gradient(180deg,var(--surface-2),var(--surface));box-shadow:var(--shadow)}
+  .obox .oh{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.18em;font-size:.66rem;color:var(--arcane-soft);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+  .req{display:flex;align-items:center;gap:13px;padding:13px 0;border-bottom:1px solid var(--line);color:#d8d1e0;font-size:1rem}
+  .req:last-child{border-bottom:none}
+  .elm{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:9px;
+    font-family:'Cinzel',serif;font-weight:800;font-size:.9rem;color:#fff}
+  .elm.cat{background:radial-gradient(circle at 40% 34%,#fff,var(--arcane) 55%,var(--arcane-deep));box-shadow:0 0 14px var(--arcane-glow)}
+  .elm.con{background:linear-gradient(180deg,#6f7884,#444b55);box-shadow:0 0 10px rgba(150,170,200,.3)}
+  .elm.arc{background:radial-gradient(circle at 40% 34%,#fff,var(--gold) 60%,#9a6f1e);box-shadow:0 0 12px rgba(227,183,101,.4)}
+  .req b{color:#fff;font-family:'Cinzel',serif;font-weight:600}
+  .req small{display:block;color:var(--faint);font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.12em;font-size:.58rem;margin-top:2px}
+  .dossier-line{display:flex;justify-content:space-between;gap:14px;padding:11px 0;border-bottom:1px solid var(--line);font-size:1rem}
+  .dossier-line:last-child{border-bottom:none}
+  .dossier-line .dl{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.14em;font-size:.62rem;color:var(--faint);align-self:center}
+  .dossier-line .dv{font-family:'Cinzel',serif;font-weight:700;color:#fff}
+  .dossier-line .dv.t{color:var(--arcane-soft)}
+
+  /* leveling */
+  .levelrow{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:var(--maxw);margin:0 auto}
+  @media(max-width:680px){.levelrow{grid-template-columns:repeat(2,1fr)}}
+  .lvl{text-align:center;border:1px solid var(--line);border-radius:16px;padding:28px 18px;
+    background:linear-gradient(180deg,var(--surface-2),var(--surface));transition:transform .35s var(--ease),border-color .35s}
+  .lvl:hover{transform:translateY(-5px);border-color:var(--line-2)}
+  .lvl .ln{font-family:'Cinzel',serif;font-weight:800;font-size:1.32rem;color:#fff;margin-bottom:7px}
+  .lvl .lx{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.16em;font-size:.6rem;color:var(--arcane-soft)}
+</style>
+</head>
+<body>
+<div class="progress"></div>
+
+<header class="topbar"><div class="inner">
+  <a class="brand" href="../index.html"><span class="sigil"></span><span>Mythic Spellbook<small>Player Guide</small></span></a>
+  <nav class="topnav">
+    <a class="home" href="../index.html">Contents</a>
+    <a class="lbl" href="choose-your-path.html">01 · Path</a>
+    <a class="lbl" href="the-heroes.html">02 · Heroes</a>
+    <a class="lbl" href="kalon-source.html">03 · Kalon</a>
+    <a class="cur lbl" href="build-your-collection.html">04 · Cards</a>
+    <a class="lbl" href="the-living-world.html">05 · World</a>
+    <a class="lbl" href="the-survivors-edge.html">06 · Survival</a>
+  </nav>
+</div></header>
+
+<header class="phead">
+  <div class="wrap">
+    <div class="num">04</div>
+    <p class="eyebrow arc">Chapter Four</p>
+    <h1>Build Your Collection</h1>
+    <p class="sub">Five primary card types, each with a role to play. Learn what they do — and the best moment to play them.</p>
+    <div class="glowline"></div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="prose">
+      <p class="lead reveal">Mythic Spellbook has <span class="term arc">five primary card types</span> — plus defensive <span class="term arc">Wall Cards</span> alongside them — each with several subtypes. Every type serves a unique purpose, giving survivors different tools to overcome challenges, strengthen their camps, and gain an advantage on the battlefield.</p>
+      <p class="reveal d1">Understanding how each card type works is essential for both survival and victory. In the sections that follow we'll explore every type, explain its role, give examples of its use, and discuss the best situations for playing it during battle.</p>
+    </div>
+  </div>
+</section>
+
+<div class="spacer"></div>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head reveal center" style="text-align:center">
+      <p class="eyebrow">The Card Types</p>
+      <h2>A Type for Every Tactic</h2>
+    </div>
+    <div class="type-gallery reveal d1">
+      <a class="tcard known" href="#trap"><span class="badge">Trap</span><img src="../assets/cardtype-1.png" alt="Trap card type"></a>
+      <a class="tcard known" href="#location"><span class="badge">Location</span><img src="../assets/cardtype-5.png" alt="Location card type"></a>
+      <a class="tcard known" href="#spell"><span class="badge">Spell</span><img src="../assets/cardtype-3.png" alt="Spell card type"></a>
+      <a class="tcard known" href="#unit"><span class="badge">Unit</span><img src="../assets/cardtype-4.png" alt="Unit card type"></a>
+      <a class="tcard known arc" href="#archon"><span class="badge">Archon</span><img src="../assets/cardtype-2.png" alt="Archon card type"></a>
+      <a class="tcard known" href="#walls"><span class="badge">Walls</span><img src="../assets/card-wall.png" alt="Wall card type"></a>
+    </div>
+    <p class="gallery-cap reveal">Five primary types and the defensive Wall Cards alongside them — each with its own subtypes and rhythm. Tap any card to jump straight to its breakdown below.</p>
+  </div>
+</section>
+
+<div class="spacer lg"></div>
+
+<!-- TRAP CARDS -->
+<section id="trap">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow arc">Card Type · 01</p>
+      <h2>Trap Cards</h2>
+    </div>
+    <div class="typefeat reveal d1">
+      <div class="tf-card"><img src="../assets/card-trap.png" alt="Trap card"></div>
+      <div class="tf-meta">
+        <span class="ctype">Hidden · Reactive</span>
+        <h3>Set the Snare</h3>
+        <p>Trap Cards are placed <strong>facedown</strong> within their placement range of your Hero — typically <strong>1 to 3 tiles</strong> away. Once placed, only you can see a trap's location; its effect stays hidden from your opponent until it is triggered.</p>
+        <p>A trap activates the instant an enemy Hero or unit moves onto its tile, resolving its effect immediately and often catching opponents completely off guard.</p>
+        <p>Traps come in many forms — dealing damage, applying status effects, restricting movement, weakening units, or creating hazards. They rarely win a battle alone, but they slow your opponent, protect key locations, and force enemies to weigh every move.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="spacer lg"></div>
+
+<!-- LOCATION -->
+<section id="location">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Card Type · 02</p>
+      <h2>Location Cards</h2>
+    </div>
+    <div class="typefeat rev reveal d1">
+      <div class="tf-card"><img src="../assets/cardtype-5.png" alt="Location card"></div>
+      <div class="tf-meta ember">
+        <span class="ctype">Battlefield · Environment</span>
+        <h3>Reshape the Field</h3>
+        <p>Location Cards change the battlefield environment itself, dramatically altering the flow of a match and creating new opportunities, advantages, and challenges for both players.</p>
+        <p>Each Location provides unique effects — increasing stats, generating resources, restoring Health, granting defensive bonuses, or unlocking special interactions that benefit your units, Heroes, factions, or you as the owner.</p>
+        <p>Because their effects sweep across large portions of the field, a well-timed Location can strengthen your forces, unravel your opponent's plans, or bend conditions to favor your deck's playstyle.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="spacer lg"></div>
+
+<!-- SPELL -->
+<section id="spell">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow arc">Card Type · 03</p>
+      <h2>Spell Cards</h2>
+    </div>
+    <div class="typefeat reveal d1">
+      <div class="tf-card"><img src="../assets/cardtype-3.png" alt="Spell card"></div>
+      <div class="tf-meta">
+        <span class="ctype">Tempo · Control</span>
+        <h3>Bend the Match</h3>
+        <p>Spell Cards let survivors build strategies, support their units, and control the flow of battle — setting up a game-winning combo, disrupting an opponent's plans, or shielding your forces at the critical moment.</p>
+        <p>The right mix of Spells can create unexpected plays and carry you through even the toughest opponents. There are <strong>four types</strong>:</p>
+      </div>
+    </div>
+    <div class="subtypes reveal">
+      <div class="subt"><h4>Normal Spells</h4><p>One-time effects that resolve immediately when played.</p></div>
+      <div class="subt"><h4>Persistent Enchantments</h4><p>Ongoing effects that remain active on the field, continuously providing benefits or altering gameplay.</p></div>
+      <div class="subt"><h4>Assault Spells</h4><p>Aggressive spells designed to damage enemies, remove threats, or apply offensive pressure.</p></div>
+      <div class="subt"><h4>Counter Spells</h4><p>Reactive spells that interrupt, negate, or punish an opponent's actions at critical moments.</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="spacer lg"></div>
+
+<!-- UNIT -->
+<section id="unit">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Card Type · 04</p>
+      <h2>Unit Cards</h2>
+    </div>
+    <div class="typefeat rev reveal d1">
+      <div class="tf-card"><img src="../assets/cardtype-4.png" alt="Unit card"></div>
+      <div class="tf-meta ember">
+        <span class="ctype">Troops · Companions</span>
+        <h3>Your Living Allies</h3>
+        <p>Units are your troops, companions, and allies — both on the battlefield and within your camp. Infused with the Abra energy of <em>Abraxas</em>, they aid survivors in combat, survival, exploration, construction, and countless other tasks across Ethos Heights.</p>
+        <div class="traits">
+          <span class="tag">Levels</span><span class="tag">Stats</span><span class="tag">Traits</span>
+          <span class="tag">Personalities</span><span class="tag">Emotions</span><span class="tag">Behaviors</span><span class="tag">Movesets</span>
+        </div>
+        <p>Every unit is unique, and many belong to archetypes and factions. Place the right units together and they reach perfect synergy, unlocking combinations impossible alone.</p>
+      </div>
+    </div>
+    <div class="note reveal">
+      <span class="k">No Single "Best" Unit</span>
+      A unit's true potential depends on how it's trained, supported, and combined with your team. Experiment with different units, archetypes, and compositions — a well-trained team can overcome impossible odds, while a poorly managed one may struggle even against weaker opponents.
+    </div>
+  </div>
+</section>
+
+<div class="spacer lg"></div>
+
+<!-- ARCHON -->
+<section id="archon">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow arc">Card Type · 05</p>
+      <h2>Archons</h2>
+    </div>
+    <div class="typefeat reveal d1">
+      <div class="tf-card"><img src="../assets/cardtype-2.png" alt="Archon card"></div>
+      <div class="tf-meta">
+        <span class="ctype">Apex · Summon-Only</span>
+        <h3>The Highest Strategy</h3>
+        <p>Archons are among the most powerful entities a survivor can command. Unlike normal units, they <strong>cannot be played directly from your hand</strong>. To bring one onto the field you must perform an <span class="term arc">Archon Summon</span> — offering specific materials and meeting the conditions listed on the Archon, at the cost of <strong>one Kalon Source point</strong>.</p>
+        <p>Archons are divided into <strong>Tiers</strong> that reflect their power and rarity. Higher tiers are far harder to summon, but often possess game-changing abilities capable of shifting an entire battle. Before a match, each Archon must be placed into your <strong>Archon Deck</strong> in the deck editor.</p>
+      </div>
+    </div>
+    <div class="summon reveal">
+      <div class="obox">
+        <div class="oh">How to Summon · Example: Zevran Kallix</div>
+        <div class="req"><span class="elm cat">★</span><span><b>1× Catalyst Unit</b><small>Required for every Archon</small></span></div>
+        <div class="req"><span class="elm con">C</span><span><b>1× Construct unit</b><small>Offering — sacrificed</small></span></div>
+        <div class="req"><span class="elm arc">A</span><span><b>1× Arcane-element unit</b><small>Offering — sacrificed</small></span></div>
+        <div class="req"><span class="elm" style="background:rgba(255,255,255,.06);border:1px solid var(--line-2)">4+</span><span><b>Offerings must be Level 4 or higher</b><small>Catalyst &amp; all offerings are sacrificed</small></span></div>
+      </div>
+      <div class="obox">
+        <div class="oh">Archon Dossier</div>
+        <div class="dossier-line"><span class="dl">Name</span><span class="dv">Zevran Kallix</span></div>
+        <div class="dossier-line"><span class="dl">Tier</span><span class="dv t">Lesser</span></div>
+        <div class="dossier-line"><span class="dl">Creator</span><span class="dv">Abraxas</span></div>
+        <div class="dossier-line"><span class="dl">Summon Cost</span><span class="dv">1 Kalon Source</span></div>
+        <div class="dossier-line"><span class="dl">Deck</span><span class="dv">Archon Deck</span></div>
+      </div>
+    </div>
+    <div class="note arc reveal">
+      <span class="k">Weigh the Sacrifice</span>
+      Every Archon demands at least one Catalyst Unit plus its Offerings — and all of them are sacrificed in the summon. Knowing when to give up valuable units to unleash an Archon is one of the highest forms of strategy in Mythic Spellbook.
+    </div>
+  </div>
+</section>
+
+<div class="spacer lg"></div>
+
+<!-- WALLS -->
+<section id="walls">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Card Type · 06</p>
+      <h2>Wall Cards</h2>
+    </div>
+    <div class="typefeat rev reveal d1">
+      <div class="tf-card"><img src="../assets/card-wall.png" alt="Wall card"></div>
+      <div class="tf-meta ember">
+        <span class="ctype">Defense · Control</span>
+        <h3>Hold the Line</h3>
+        <p>Wall Cards are defensive structures that let survivors control the battlefield and shape the flow of combat. Placed in strategic spots, they block movement, create chokepoints, protect valuable units, and limit an opponent's options.</p>
+        <p>Most ranged attacks <strong>cannot pass through a wall</strong>, making them excellent cover for Heroes, Units, and key objectives. A well-placed wall forces opponents into longer routes, wasted resources, or exposed counterattacks.</p>
+        <p>Walls are usually stationary once placed — but some possess unique abilities to reposition, transform, or interact with the field in special ways, and a few even carry their own attacks, defensive effects, or passives.</p>
+      </div>
+    </div>
+    <div class="note reveal">
+      <span class="k">Defense Wins Battles</span>
+      Walls excel at controlling the distance between you and your opponent — shielding vulnerable units, forming defensive lines, and slowing an enemy advance. A strong defense can matter just as much as a powerful offense, and mastering Wall Cards is often the key to surviving the toughest encounters.
+    </div>
+  </div>
+</section>
+
+<div class="spacer lg"></div>
+
+<!-- LEVELING -->
+<section id="leveling">
+  <div class="wrap">
+    <div class="sec-head reveal center" style="text-align:center">
+      <p class="eyebrow arc">Progression</p>
+      <h2>The Leveling System</h2>
+      <p class="muted" style="margin-top:8px">Four kinds of entity grow stronger with every battle they survive.</p>
+    </div>
+    <div class="levelrow reveal d1">
+      <div class="lvl"><div class="ln">Heroes</div><div class="lx">Stronger leaders</div></div>
+      <div class="lvl"><div class="ln">Units</div><div class="lx">Reliable combatants</div></div>
+      <div class="lvl"><div class="ln">Summons</div><div class="lx">Effective support</div></div>
+      <div class="lvl"><div class="ln">Archons</div><div class="lx">Terrifying threats</div></div>
+    </div>
+    <div class="prose">
+      <p class="reveal" style="margin-top:34px">Each earns <span class="term arc">Experience (EXP)</span> through combat — gained by defeating enemy Units, Heroes, Summons, and Archons. As they level, their stats, effectiveness, and overall power increase, letting them take on greater challenges and stronger opponents.</p>
+    </div>
+    <div class="note reveal">
+      <span class="k">Train to Survive</span>
+      The more battles you fight and enemies you defeat, the faster your forces grow. A well-trained army can often overcome opponents with stronger cards but less experience — so invest in developing your Heroes, Units, Summons, and Archons before venturing beyond Camp Heights.
+    </div>
+  </div>
+</section>
+
+<nav class="pnav">
+  <a class="prev" href="kalon-source.html"><span class="dir">← Chapter Three</span><span class="t">Kalon Source &amp; Energy</span></a>
+  <a class="next" href="the-living-world.html"><span class="dir">Chapter Five →</span><span class="t">The Living World</span></a>
+</nav>
+
+<footer class="foot">Mythic Spellbook · Player Guide — updated as the world grows</footer>
+
+<script src="../js/guide.js"></script>
+</body>
+</html>

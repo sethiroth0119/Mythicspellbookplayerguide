@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalon Source &amp; Energy — Mythic Spellbook Player Guide</title>
+<link rel="stylesheet" href="../css/guide.css">
+<style>
+  .topnav a.cur{color:var(--text);background:rgba(168,125,255,.14)}
+  .sec-head{max-width:var(--read);margin:0 auto 26px}
+  .sec-head h2{font-size:clamp(1.6rem,3.6vw,2.3rem);color:#fff;margin-bottom:10px}
+  .sec-head .eyebrow{margin-bottom:14px}
+
+  .orb-feature{display:flex;flex-direction:column;align-items:center;gap:20px;padding:48px 30px;border-radius:22px;
+    border:1px solid var(--line);box-shadow:var(--shadow);max-width:560px;margin:0 auto;text-align:center}
+  .orb-feature.en{background:radial-gradient(circle at 50% 28%,rgba(120,160,255,.18),transparent 62%),linear-gradient(180deg,var(--surface-2),var(--surface))}
+  .orb-feature.ka{background:radial-gradient(circle at 50% 28%,rgba(168,125,255,.2),transparent 62%),linear-gradient(180deg,var(--surface-2),var(--surface))}
+  .orb-feature .orb{width:128px;height:128px;animation:float 6s ease-in-out infinite;object-fit:contain}
+  .orb-feature.en .orb{filter:drop-shadow(0 0 34px rgba(120,160,255,.7))}
+  .orb-feature.ka .orb{filter:drop-shadow(0 0 34px rgba(168,125,255,.75))}
+  @keyframes float{0%,100%{transform:translateY(-5px)}50%{transform:translateY(7px)}}
+  .orb-feature .big{font-family:'Cinzel',serif;font-weight:800;font-size:2.2rem;color:#fff;line-height:1}
+  .orb-feature .big small{display:block;font-family:'Oswald',sans-serif;font-weight:500;text-transform:uppercase;letter-spacing:.2em;font-size:.62rem;color:var(--muted);margin-top:8px}
+  .orb-feature .big b{color:var(--ember-soft)}
+  .orb-feature.ka .big b{color:var(--arcane-soft)}
+
+  .pips{display:flex;gap:13px;justify-content:center;margin-top:4px}
+  .pip{width:28px;height:28px;border-radius:50%;background:radial-gradient(circle at 40% 34%,#fff,var(--arcane) 52%,var(--arcane-deep));
+    box-shadow:0 0 16px var(--arcane-glow);animation:pop .5s var(--ease) backwards}
+  .pip:nth-child(2){animation-delay:.12s}.pip:nth-child(3){animation-delay:.24s}
+  @keyframes pop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+
+  /* resource rail */
+  .rail-wrap{display:grid;grid-template-columns:118px 1fr;gap:40px;align-items:start;max-width:740px;margin:0 auto}
+  @media(max-width:620px){.rail-wrap{grid-template-columns:1fr;justify-items:center}}
+  .rail-wrap .railimg{border-radius:12px;border:1px solid var(--line-2);overflow:hidden;box-shadow:var(--shadow)}
+  .rail-wrap .railimg img{width:118px;display:block}
+  .rgroup{margin-bottom:24px}
+  .rgroup h4{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.2em;font-size:.68rem;margin:0 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  .rgroup.foe h4{color:#e87a7a}
+  .rgroup.you h4{color:var(--arcane-soft)}
+  .ritem{display:flex;align-items:baseline;gap:11px;padding:7px 0;color:var(--muted);font-size:1rem}
+  .ritem .d{width:9px;height:9px;border-radius:50%;flex:0 0 auto;position:relative;top:-1px}
+  .rgroup.foe .d{background:#e87a7a;box-shadow:0 0 8px rgba(232,122,122,.6)}
+  .rgroup.you .d{background:var(--arcane-soft);box-shadow:0 0 8px var(--arcane-glow)}
+  .ritem b{color:#fff;font-family:'Cinzel',serif;font-weight:600;font-size:.98rem}
+
+  /* card showcase */
+  .card-showcase{display:grid;grid-template-columns:210px 1fr;gap:40px;align-items:center;max-width:var(--maxw);margin:0 auto;
+    padding:34px;border-radius:22px;border:1px solid var(--line);box-shadow:var(--shadow);
+    background:radial-gradient(120% 100% at 0% 0%,rgba(227,183,101,.1),transparent 55%),linear-gradient(180deg,var(--surface-2),var(--surface))}
+  @media(max-width:680px){.card-showcase{grid-template-columns:1fr;justify-items:center;text-align:center}}
+  .card-showcase .cardimg{border-radius:12px;overflow:hidden;box-shadow:0 24px 50px -16px rgba(0,0,0,.7),0 0 40px rgba(227,183,101,.15);
+    border:1px solid rgba(227,183,101,.3)}
+  .card-showcase .cardimg img{width:210px;display:block}
+  .card-showcase .cname{font-family:'Cinzel',serif;font-weight:800;font-size:1.8rem;color:#fff;margin:0 0 6px}
+  .card-showcase .ctype{display:inline-block;font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.16em;
+    font-size:.66rem;color:var(--gold);border:1px solid rgba(227,183,101,.4);padding:4px 11px;border-radius:999px;margin-bottom:18px}
+  .ability{border-left:3px solid var(--gold);background:rgba(227,183,101,.06);padding:16px 20px;border-radius:0 12px 12px 0}
+  .ability .ah{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.16em;font-size:.66rem;color:var(--gold);margin-bottom:7px}
+  .ability p{margin:0;color:#d8d1c4;font-size:1rem;line-height:1.6}
+  .ability p+p{margin-top:10px}
+
+  /* kalon transform evolution */
+  .evos{display:flex;flex-direction:column;gap:20px;max-width:var(--maxw);margin:0 auto}
+  .evo{display:flex;align-items:center;justify-content:center;gap:clamp(10px,3vw,32px);flex-wrap:wrap;
+    padding:26px clamp(16px,3vw,34px);border-radius:20px;border:1px solid var(--line);box-shadow:var(--shadow);
+    background:radial-gradient(120% 100% at 50% 0%,rgba(168,125,255,.08),transparent 60%),linear-gradient(180deg,var(--surface-2),var(--surface))}
+  .evo-mon{position:relative;width:clamp(150px,22vw,206px);aspect-ratio:1;border-radius:16px;display:grid;place-items:center;overflow:hidden;
+    background:radial-gradient(circle at 50% 60%,rgba(255,255,255,.05),transparent 66%)}
+  .evo-mon.kalon{background:radial-gradient(circle at 50% 56%,rgba(168,125,255,.26),transparent 68%);
+    border:1px solid rgba(168,125,255,.32);box-shadow:inset 0 0 44px rgba(168,125,255,.28)}
+  .evo-mon img{max-height:84%;max-width:86%;width:auto;filter:drop-shadow(0 12px 18px rgba(0,0,0,.6))}
+  .evo-mon.kalon img{filter:drop-shadow(0 0 22px rgba(168,125,255,.5)) drop-shadow(0 12px 18px rgba(0,0,0,.6))}
+  .evo-mon .xtag{position:absolute;bottom:11px;left:50%;transform:translateX(-50%);white-space:nowrap;
+    font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.16em;font-size:.56rem;padding:4px 11px;border-radius:999px;
+    background:rgba(10,9,12,.74);border:1px solid var(--line-2);color:var(--muted);backdrop-filter:blur(4px)}
+  .evo-mon.kalon .xtag{background:var(--arcane-deep);border-color:var(--arcane);color:#fff}
+  .korb{width:30px;height:30px;object-fit:contain;filter:drop-shadow(0 0 10px var(--arcane-glow))}
+  .statcompare{display:flex;align-items:center;justify-content:center;gap:clamp(10px,2.5vw,24px);flex-wrap:wrap;max-width:var(--maxw);margin:0 auto}
+  .statbox{flex:1 1 330px;max-width:548px;border-radius:13px;overflow:hidden;border:1px solid var(--line-2);box-shadow:var(--shadow)}
+  .statbox img{width:100%;display:block}
+  .statbox.kalon{border-color:var(--arcane);box-shadow:0 0 0 1px var(--arcane),0 0 34px var(--arcane-glow)}
+  .xarrow{display:flex;flex-direction:column;align-items:center;gap:7px}
+  .xarrow .ai{font-size:2.4rem;color:var(--arcane-soft);text-shadow:0 0 20px var(--arcane-glow);line-height:1}
+  .xarrow .al{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.18em;font-size:.58rem;color:var(--faint);white-space:nowrap}
+  @media(max-width:560px){.xarrow .ai{transform:rotate(90deg)}}
+  .xbenefits{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:32px auto 0;max-width:720px}
+  .xchip{display:flex;align-items:center;gap:10px;padding:12px 17px;border-radius:12px;border:1px solid rgba(168,125,255,.3);
+    background:rgba(168,125,255,.07);color:#e7dfe9;font-size:.98rem}
+  .xchip .xi{font-family:'Cinzel',serif;color:var(--arcane-soft);font-weight:800;font-size:1.1rem;line-height:1}
+</style>
+</head>
+<body>
+<div class="progress"></div>
+
+<header class="topbar"><div class="inner">
+  <a class="brand" href="../index.html"><span class="sigil"></span><span>Mythic Spellbook<small>Player Guide</small></span></a>
+  <nav class="topnav">
+    <a class="home" href="../index.html">Contents</a>
+    <a class="lbl" href="choose-your-path.html">01 · Path</a>
+    <a class="lbl" href="the-heroes.html">02 · Heroes</a>
+    <a class="cur lbl" href="kalon-source.html">03 · Kalon</a>
+    <a class="lbl" href="build-your-collection.html">04 · Cards</a>
+    <a class="lbl" href="the-living-world.html">05 · World</a>
+    <a class="lbl" href="the-survivors-edge.html">06 · Survival</a>
+  </nav>
+</div></header>
+
+<header class="phead">
+  <div class="wrap">
+    <div class="num">03</div>
+    <p class="eyebrow arc">Chapter Three</p>
+    <h1>Kalon Source &amp; Energy</h1>
+    <p class="sub">Two resources fuel every match. One lets you act — the other lets you transcend.</p>
+    <div class="glowline"></div>
+  </div>
+</header>
+
+<!-- ENERGY -->
+<section>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">The Fuel of Combat</p>
+      <h2>Energy</h2>
+    </div>
+    <div class="prose">
+      <p class="lead reveal">Energy is the primary resource used during battle. It's required to <strong>play cards</strong> from your hand, <strong>activate attacks and abilities</strong>, and <strong>move</strong> your units and Heroes around the battlefield by swapping or repositioning between tiles.</p>
+    </div>
+    <div class="spacer" style="height:32px"></div>
+    <div class="orb-feature en reveal d1">
+      <img class="orb" src="../assets/energy-orb.png" alt="Energy">
+      <div class="big"><b>+1</b> Energy<small>Gained at the start of every turn</small></div>
+    </div>
+    <div class="prose">
+      <p class="reveal" style="margin-top:34px">At the start of each turn you gain <span class="term">1 Energy</span> by default. But certain cards, abilities, passives, and battlefield effects can generate <em>additional</em> Energy — letting you take more actions and execute powerful combinations in a single turn.</p>
+    </div>
+    <div class="note reveal">
+      <span class="k">Skill Check</span>
+      Managing your Energy is one of the most important skills in Mythic Spellbook. Survivors who spend wisely hold a significant advantage over those who spend carelessly — <strong>every point can be the difference between victory and defeat.</strong>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+<div class="spacer"></div>
+
+<!-- KALON SOURCE -->
+<section>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow arc">The Power of the Abra</p>
+      <h2>Kalon Source</h2>
+    </div>
+    <div class="prose">
+      <p class="lead reveal">The <span class="term arc">Kalon Source</span> is the power of the Abra — a magical force that flows from <em>Abraxas</em>, letting users tap into their light and dark sides and transform into their highest selves.</p>
+    </div>
+    <div class="spacer" style="height:32px"></div>
+    <div class="orb-feature ka reveal d1">
+      <img class="orb" src="../assets/kalon-orb.png" alt="Kalon Source">
+      <div class="big"><b>3</b><small>Kalon Source points to start</small></div>
+      <div class="pips"><span class="pip"></span><span class="pip"></span><span class="pip"></span></div>
+    </div>
+    <div class="prose">
+      <p class="reveal" style="margin-top:34px">Each player starts with only <span class="term arc">3 Kalon Source points</span>, and can gain more through cards, effects, and unit passives. For example, <strong>Kalon Channel</strong> is a passive that grants its owner <strong>1 Kalon Source point</strong> whenever a unit they control kills another unit — fueling Kalon Transformations and other powerful means of summoning.</p>
+    </div>
+  </div>
+</section>
+
+<div class="spacer"></div>
+
+<!-- RESOURCE RAIL -->
+<section>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Reading the Rail</p>
+      <h2>Your Resource Readouts</h2>
+      <p class="muted" style="margin-top:8px">The side rail tracks both players' decks, graveyards, and Kalon Source at a glance.</p>
+    </div>
+    <div class="rail-wrap reveal d1">
+      <div class="railimg"><img src="../assets/kalon-panel.png" alt="In-battle resource rail"></div>
+      <div>
+        <div class="rgroup foe">
+          <h4>Enemy</h4>
+          <div class="ritem"><span class="d"></span><span><b>Foe Deck</b> — cards remaining in your opponent's deck.</span></div>
+          <div class="ritem"><span class="d"></span><span><b>Foe Graveyard</b> — cards your opponent has lost to the graveyard.</span></div>
+          <div class="ritem"><span class="d"></span><span><b>Enemy Kalon Source</b> — how many Source points the foe has banked.</span></div>
+        </div>
+        <div class="rgroup you">
+          <h4>You</h4>
+          <div class="ritem"><span class="d"></span><span><b>Your Kalon Source</b> — your current Source points, ready to spend.</span></div>
+          <div class="ritem"><span class="d"></span><span><b>Your Graveyard</b> — cards you've lost during the match.</span></div>
+          <div class="ritem"><span class="d"></span><span><b>Your Deck</b> — cards remaining for you to draw.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="spacer"></div>
+
+<!-- KALON TRANSFORM -->
+<section>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow arc">Reaching the Highest Self</p>
+      <h2>Kalon Transform</h2>
+    </div>
+    <div class="prose">
+      <p class="reveal">Many units begin battle in their <strong>base form</strong>, carrying their standard stats, abilities, and passives. But some possess a powerful evolution known as a <span class="term arc">Kalon Form</span> — a unit reaching a higher state of power and growth.</p>
+    </div>
+    <div class="spacer" style="height:34px"></div>
+    <div class="evos">
+      <div class="evo reveal d1">
+        <div class="evo-mon base"><img src="../assets/kt-golem-base.png" alt="Stone golem in its base form"><span class="xtag">Base Form</span></div>
+        <div class="xarrow"><span class="ai">⟶</span><img class="korb" src="../assets/kalon-orb.png" alt=""><span class="al">Kalon Transform</span></div>
+        <div class="evo-mon kalon"><img src="../assets/kt-golem-kalon.png" alt="Stone golem in its Kalon Form"><span class="xtag">Kalon Form</span></div>
+      </div>
+      <div class="evo reveal d1">
+        <div class="evo-mon base"><img src="../assets/kt-demon-base.png" alt="Fire demon in its base form"><span class="xtag">Base Form</span></div>
+        <div class="xarrow"><span class="ai">⟶</span><img class="korb" src="../assets/kalon-orb.png" alt=""><span class="al">Kalon Transform</span></div>
+        <div class="evo-mon kalon"><img src="../assets/kt-demon-kalon.png" alt="Fire demon in its Kalon Form"><span class="xtag">Kalon Form</span></div>
+      </div>
+    </div>
+    <div class="xbenefits reveal">
+      <div class="xchip"><span class="xi">↑</span> Stats increase significantly</div>
+      <div class="xchip"><span class="xi">✦</span> New passives, abilities &amp; effects</div>
+      <div class="xchip"><span class="xi">♥</span> Health fully restored</div>
+    </div>
+    <div class="prose">
+      <p class="reveal" style="margin-top:34px">When a unit transforms, its stats climb sharply and certain Kalon Forms unlock entirely new passives, abilities, or special effects unavailable in the base form. Just as importantly, the unit's <strong>Health is fully restored</strong> — letting it return to the fight stronger than before and potentially reverse a losing situation.</p>
+    </div>
+    <div class="spacer" style="height:8px"></div>
+    <div class="sec-head reveal" style="text-align:center;margin-bottom:18px">
+      <p class="eyebrow">The Numbers</p>
+      <h3 style="font-family:'Cinzel',serif;font-weight:700;font-size:1.3rem;color:#fff">Base Stats &rarr; Kalon Form</h3>
+    </div>
+    <div class="statcompare reveal d1">
+      <div class="statbox base"><img src="../assets/kt-stats-base.png" alt="Stat preview in base form"></div>
+      <div class="xarrow"><span class="ai">⟶</span></div>
+      <div class="statbox kalon"><img src="../assets/kt-stats-kalon.png" alt="Stat preview after Kalon Transform"></div>
+    </div>
+    <div class="note arc reveal">
+      <span class="k">Timing Is Everything</span>
+      Transform too early and you may be left without options later; transform too late and you risk losing a valuable unit before it reaches its full potential. Survivors who master the timing of their Kalon Transforms hold a far greater chance of achieving victory.
+    </div>
+  </div>
+</section>
+
+<div class="spacer"></div>
+
+<!-- MR ASCEND -->
+<section>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow gold-eye" style="color:var(--gold)">An Exception to the Rule</p>
+      <h2>Example: Mr Ascend</h2>
+      <p class="muted" style="margin-top:8px">Some units bend the rules of the Source entirely.</p>
+    </div>
+    <div class="card-showcase reveal d1">
+      <div class="cardimg"><img src="../assets/card-ascend.png" alt="Mr Ascend card"></div>
+      <div>
+        <h3 class="cname">Mr Ascend</h3>
+        <span class="ctype">Unit · On-Play Ability</span>
+        <div class="ability">
+          <div class="ah">On Play — Transform</div>
+          <p>When this card is played from your hand, you may target a unit you control within its placement range. If that unit has a valid <strong>Kalon Transformation</strong> available, you may immediately transform it.</p>
+          <p>This effect <strong>does not consume a Kalon Source point</strong> — letting you access a unit's transformed form without paying the normal transformation cost.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<nav class="pnav">
+  <a class="prev" href="the-heroes.html"><span class="dir">← Chapter Two</span><span class="t">The Heroes &amp; The Battlefield</span></a>
+  <a class="next" href="build-your-collection.html"><span class="dir">Chapter Four →</span><span class="t">Build Your Collection</span></a>
+</nav>
+
+<footer class="foot">Mythic Spellbook · Player Guide — updated as the world grows</footer>
+
+<script src="../js/guide.js"></script>
+</body>
+</html>

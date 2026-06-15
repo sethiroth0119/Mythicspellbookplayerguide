@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Heroes &amp; The Battlefield — Mythic Spellbook Player Guide</title>
+<link rel="stylesheet" href="../css/guide.css">
+<style>
+  .topnav a.cur{color:var(--text);background:rgba(168,125,255,.14)}
+  .feature{max-width:var(--maxw);margin:0 auto}
+  .sec-head{max-width:var(--read);margin:0 auto 26px}
+  .sec-head h2{font-size:clamp(1.6rem,3.6vw,2.3rem);color:#fff;margin-bottom:10px}
+  .sec-head .eyebrow{margin-bottom:14px}
+
+  /* King equivalence */
+  .king-eq{display:flex;align-items:center;justify-content:center;gap:clamp(14px,4vw,46px);flex-wrap:wrap;
+    padding:40px 24px;border-radius:22px;border:1px solid var(--line);box-shadow:var(--shadow);
+    background:radial-gradient(120% 90% at 50% 0%,rgba(168,125,255,.12),transparent 60%),linear-gradient(180deg,var(--surface-2),var(--surface))}
+  .king-eq .trio{display:flex;align-items:flex-end;gap:-8px}
+  .king-eq .trio img{height:clamp(96px,16vw,168px);width:auto;filter:drop-shadow(0 14px 20px rgba(0,0,0,.6));margin-left:-14px}
+  .king-eq .trio img:first-child{margin-left:0}
+  .king-eq .eq{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(2.4rem,7vw,4.4rem);color:var(--arcane-soft);
+    text-shadow:0 0 26px var(--arcane-glow)}
+  .king-eq .king{display:flex;flex-direction:column;align-items:center;gap:12px}
+  .king-eq .king img{height:clamp(150px,22vw,240px);filter:drop-shadow(0 0 30px rgba(168,125,255,.35))}
+  .king-eq .king .lab{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.2em;font-size:.7rem;color:var(--muted)}
+
+  /* range board */
+  .range-wrap{display:grid;grid-template-columns:minmax(260px,360px) 1fr;gap:44px;align-items:center;max-width:var(--maxw);margin:0 auto}
+  @media(max-width:760px){.range-wrap{grid-template-columns:1fr;justify-items:center}}
+  .board5{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;width:min(360px,84vw);aspect-ratio:1}
+  .cell{border-radius:9px;background:rgba(255,255,255,.025);border:1px solid var(--line);position:relative;transition:.4s var(--ease)}
+  .cell.r2{background:rgba(255,122,60,.09);border-color:rgba(255,122,60,.22)}
+  .cell.r1{background:rgba(255,122,60,.2);border-color:rgba(255,122,60,.5)}
+  .cell.hero{background:radial-gradient(circle,rgba(168,125,255,.4),rgba(124,68,230,.15));border-color:var(--arcane);
+    box-shadow:0 0 22px rgba(168,125,255,.4),inset 0 0 14px rgba(168,125,255,.3);display:grid;place-items:center}
+  .cell.hero::after{content:"♚";font-size:1.7rem;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.6)}
+  .range-legend{display:flex;flex-direction:column;gap:16px}
+  .leg{display:flex;align-items:center;gap:13px}
+  .leg .sw{width:26px;height:26px;border-radius:7px;flex:0 0 auto}
+  .leg .sw.h{background:radial-gradient(circle,rgba(168,125,255,.5),rgba(124,68,230,.2));border:1px solid var(--arcane)}
+  .leg .sw.s1{background:rgba(255,122,60,.2);border:1px solid rgba(255,122,60,.5)}
+  .leg .sw.s2{background:rgba(255,122,60,.09);border:1px solid rgba(255,122,60,.22)}
+  .leg b{font-family:'Cinzel',serif;color:#fff;font-weight:600}
+  .leg span{color:var(--muted);font-size:.96rem}
+
+  /* annotated board */
+  .board-fig{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line-2);box-shadow:var(--shadow);max-width:760px;margin:0 auto}
+  .board-fig img{width:100%;display:block}
+  .ping{position:absolute;left:24%;top:60%;width:64px;height:64px;transform:translate(-50%,-50%)}
+  .ping .ring{position:absolute;inset:0;border-radius:50%;border:2px solid var(--arcane-soft);box-shadow:0 0 18px var(--arcane-glow)}
+  .ping .ring{animation:ping 2s ease-out infinite}
+  @keyframes ping{0%{transform:scale(.5);opacity:1}100%{transform:scale(1.5);opacity:0}}
+  .ping .dot{position:absolute;inset:38%;border-radius:50%;background:var(--arcane-soft);box-shadow:0 0 14px var(--arcane)}
+  .ping .tip{position:absolute;left:50%;bottom:118%;transform:translateX(-50%);white-space:nowrap;
+    font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.16em;font-size:.66rem;color:#fff;
+    background:rgba(124,68,230,.85);padding:5px 11px;border-radius:7px;box-shadow:0 6px 16px rgba(0,0,0,.5)}
+  @media(prefers-reduced-motion:reduce){.ping .ring{animation:none}}
+
+  .icon-row{display:flex;align-items:center;gap:18px;padding:20px 24px;border-radius:16px;border:1px solid var(--line);
+    background:linear-gradient(180deg,var(--surface-2),var(--surface));max-width:var(--read);margin:26px auto 0}
+  .icon-row .ic{width:62px;height:62px;flex:0 0 auto;display:grid;place-items:center}
+  .icon-row .ic::after{content:"♚";font-size:2rem;color:#fff;text-shadow:0 0 14px var(--arcane-glow)}
+  .icon-row p{margin:0;color:var(--muted);font-size:.98rem}
+  .icon-row b{color:#fff;font-family:'Cinzel',serif}
+
+  /* health figure split */
+  .split{display:grid;grid-template-columns:300px 1fr;gap:40px;align-items:center;max-width:var(--maxw);margin:0 auto}
+  @media(max-width:780px){.split{grid-template-columns:1fr;justify-items:center}.split .txtcol{max-width:var(--read)}}
+  .split.rev{grid-template-columns:1fr 300px}
+  @media(max-width:780px){.split.rev{grid-template-columns:1fr}}
+
+  /* HUD annotation */
+  .hud-wrap{display:grid;grid-template-columns:250px 1fr;gap:40px;align-items:start;max-width:var(--maxw);margin:0 auto}
+  @media(max-width:780px){.hud-wrap{grid-template-columns:1fr;justify-items:center}}
+  .hud-fig{position:relative;width:250px;flex:0 0 auto}
+  .hud-fig img{width:100%;border-radius:12px;border:1px solid var(--line-2);box-shadow:var(--shadow)}
+  .hud-fig .b{position:absolute;right:-15px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;
+    font-family:'Cinzel',serif;font-weight:700;font-size:.9rem;color:var(--bg);background:var(--ember-soft);
+    box-shadow:0 0 0 4px rgba(10,9,12,.8),0 6px 14px rgba(0,0,0,.5)}
+  .acc{max-width:560px}
+  .acc-item{border-bottom:1px solid var(--line)}
+  .acc-item button{width:100%;text-align:left;background:none;border:none;cursor:pointer;color:var(--text);
+    padding:18px 4px;display:flex;align-items:center;gap:14px;font-family:'Cinzel',serif;font-size:1.12rem;font-weight:600}
+  .acc-item .n{width:28px;height:28px;flex:0 0 auto;border-radius:8px;display:grid;place-items:center;
+    font-size:.85rem;background:rgba(255,122,60,.14);color:var(--ember-soft);border:1px solid rgba(255,122,60,.3)}
+  .acc-item .ar{margin-left:auto;color:var(--faint);transition:transform .3s var(--ease);font-family:'Spectral'}
+  .acc-item.open .ar{transform:rotate(90deg);color:var(--ember-soft)}
+  .acc-item .panel-body{max-height:0;overflow:hidden;transition:max-height .4s var(--ease)}
+  .acc-item.open .panel-body{max-height:260px}
+  .acc-item .panel-body p{margin:0;padding:0 4px 22px 46px;color:var(--muted);font-size:1.01rem;line-height:1.65}
+
+  /* consumable slots */
+  .consum{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;max-width:520px;margin:0 auto}
+  .slot{aspect-ratio:1;border-radius:12px;border:1px dashed var(--line-2);background:rgba(255,255,255,.02);
+    display:grid;place-items:center;font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.16em;
+    font-size:.6rem;color:var(--faint);position:relative;transition:.3s var(--ease)}
+  .slot::before{content:"";position:absolute;top:9px;left:9px;width:8px;height:8px;border-radius:50%;background:rgba(255,122,60,.4)}
+  .slot:hover{border-color:rgba(255,122,60,.5);color:var(--ember-soft);background:rgba(255,122,60,.05)}
+  .consum-cap{text-align:center;color:var(--faint);font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.2em;font-size:.64rem;margin-top:16px}
+</style>
+</head>
+<body>
+<div class="progress"></div>
+
+<header class="topbar"><div class="inner">
+  <a class="brand" href="../index.html"><span class="sigil"></span><span>Mythic Spellbook<small>Player Guide</small></span></a>
+  <nav class="topnav">
+    <a class="home" href="../index.html">Contents</a>
+    <a class="lbl" href="choose-your-path.html">01 · Path</a>
+    <a class="cur lbl" href="the-heroes.html">02 · Heroes</a>
+    <a class="lbl" href="kalon-source.html">03 · Kalon</a>
+    <a class="lbl" href="build-your-collection.html">04 · Cards</a>
+    <a class="lbl" href="the-living-world.html">05 · World</a>
+    <a class="lbl" href="the-survivors-edge.html">06 · Survival</a>
+  </nav>
+</div></header>
+
+<header class="phead">
+  <div class="wrap">
+    <div class="num">02</div>
+    <p class="eyebrow">Chapter Two</p>
+    <h1>The Heroes &amp; The Battlefield</h1>
+    <p class="sub">Your Hero is the heart of your camp. Learn how they anchor the board — and how to read every panel of the battle screen.</p>
+    <div class="glowline"></div>
+  </div>
+</header>
+
+<!-- THE KING -->
+<section>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow arc">The Hero</p>
+      <h2>Your Hero Is the King</h2>
+    </div>
+    <div class="prose">
+      <p class="reveal">Heroes are the most important units on the battlefield — much like the <span class="term arc">King</span> in a game of chess. Every match begins with your Hero already deployed on the field, serving as the leader and protector of your camp.</p>
+    </div>
+    <div class="spacer" style="height:36px"></div>
+    <div class="king-eq reveal d1">
+      <div class="trio">
+        <img src="../assets/lyra.png" alt="">
+        <img src="../assets/cedric.png" alt="">
+        <img src="../assets/vex.png" alt="">
+      </div>
+      <div class="eq">=</div>
+      <div class="king"><img src="../assets/chess-king.png" alt="Chess King"><span class="lab">The King of Your Camp</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="spacer"></div>
+
+<!-- PLACEMENT RANGE -->
+<section>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Placement Range</p>
+      <h2>Cards Are Placed Around Your Hero</h2>
+    </div>
+    <div class="prose">
+      <p class="reveal">Most cards are placed based on their <strong>placement range</strong> relative to your Hero. A unit with a placement range of <span class="term">1</span> must be placed on a tile directly adjacent to your Hero. A unit with a range of <span class="term">2</span> can be placed up to two tiles away. This placement system also applies to other card types, covered later in this guide.</p>
+    </div>
+    <div class="spacer" style="height:30px"></div>
+    <div class="range-wrap reveal d1">
+      <div class="board5" id="board5"></div>
+      <div class="range-legend">
+        <div class="leg"><span class="sw h"></span><div><b>Your Hero</b><br><span>Deployed at the centre from turn one.</span></div></div>
+        <div class="leg"><span class="sw s1"></span><div><b>Range 1</b><br><span>Tiles directly adjacent to your Hero.</span></div></div>
+        <div class="leg"><span class="sw s2"></span><div><b>Range 2</b><br><span>Up to two tiles away from your Hero.</span></div></div>
+      </div>
+    </div>
+    <div class="note reveal">
+      <span class="k">Top Priority</span>
+      Protecting your Hero should always be one of your highest priorities. Your Hero is the heart of your camp's defenses — and if they fall, your camp falls with them. <strong>If your Hero is defeated, the battle immediately ends</strong> and you are shown the defeat screen.
+    </div>
+  </div>
+</section>
+
+<div class="spacer"></div>
+
+<!-- ON THE BOARD -->
+<section>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow arc">Spotting Your Hero</p>
+      <h2>The Hero on the Board</h2>
+    </div>
+    <div class="prose">
+      <p class="reveal">As of right now — with online battles being 2-player PvP — look for the <span class="term arc">king chess-piece icon</span>. This is how you'll know which unit is a Hero and which is a normal unit.</p>
+    </div>
+    <div class="spacer" style="height:28px"></div>
+    <div class="board-fig reveal d1">
+      <img src="../assets/board-clean.png" alt="A Mythic Spellbook battle board">
+      <div class="ping"><div class="ring"></div><div class="dot"></div><div class="tip">Your Hero</div></div>
+    </div>
+    <div class="icon-row reveal">
+      <div class="ic"></div>
+      <p><b>Hero chess-piece icon.</b> Stands for the player's Hero on the board — the one unit you cannot afford to lose.</p>
+    </div>
+  </div>
+</section>
+
+<div class="spacer"></div>
+
+<!-- HEALTH & DEFEAT -->
+<section>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Survival</p>
+      <h2>Health, Defeat &amp; Risk vs. Reward</h2>
+    </div>
+    <div class="split reveal d1">
+      <div class="figure"><img src="../assets/hero-status.png" alt="Hero health panels"><div class="cap">Hero status — health, effects &amp; level</div></div>
+      <div class="txtcol">
+        <p>All Heroes begin with <span class="term">50 Health</span>. As they fight and gain experience, they level up and grow stronger — increasing their stats and overall effectiveness on the battlefield.</p>
+        <p>When a Hero's Health reaches <strong>0</strong>, that Hero is defeated — and defeat comes with consequences. Any consumables you brought in, plus items and loot collected from fallen enemies or allies, are at risk of being lost. On death, a percentage of the resources, loot, and consumables carried by your Hero is dropped as part of the game's survival and risk-reward system.</p>
+      </div>
+    </div>
+    <div class="note arc reveal">
+      <span class="k">The Survivor's Dilemma</span>
+      Every battle is a balance between pushing forward for valuable rewards and knowing when to retreat with the resources you've already earned.
+    </div>
+  </div>
+</section>
+
+<div class="spacer"></div>
+
+<!-- BATTLE SCREEN -->
+<section>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow arc">The Interface</p>
+      <h2>Reading the Battle Screen</h2>
+      <p class="muted" style="margin-top:8px">The left-hand panel keeps you informed at a glance. Tap each element to learn what it does.</p>
+    </div>
+    <div class="hud-wrap reveal d1">
+      <div class="hud-fig">
+        <img src="../assets/battle-hud.png" alt="Battle interface panel">
+        <span class="b" style="top:5%">1</span>
+        <span class="b" style="top:23%">2</span>
+        <span class="b" style="top:37%">3</span>
+        <span class="b" style="top:60%">4</span>
+      </div>
+      <div class="acc" data-acc-group>
+        <div class="acc-item open" data-acc-item>
+          <button data-acc><span class="n">1</span> Turn &amp; Controls <span class="ar">›</span></button>
+          <div class="panel-body"><p>Concede, settings, and the turn timer — including which player's turn it currently is and how long is left on the clock.</p></div>
+        </div>
+        <div class="acc-item" data-acc-item>
+          <button data-acc><span class="n">2</span> Weather <span class="ar">›</span></button>
+          <div class="panel-body"><p>The weather at this moment. Weather plays a huge part in battle — it can increase the attack of units and Heroes, or even change the tide of the game entirely.</p></div>
+        </div>
+        <div class="acc-item" data-acc-item>
+          <button data-acc><span class="n">3</span> Game Information <span class="ar">›</span></button>
+          <div class="panel-body"><p>Basic game information — prompts that tell you what to do next, such as tapping a unit to see its details or playing a card from your hand.</p></div>
+        </div>
+        <div class="acc-item" data-acc-item>
+          <button data-acc><span class="n">4</span> Battle Log <span class="ar">›</span></button>
+          <div class="panel-body"><p>A running record of everything happening in the game, so players know exactly what is occurring on the board — and can scroll back to review the last thing that happened.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="spacer"></div>
+
+<!-- CONSUMABLES -->
+<section>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Loadout</p>
+      <h2>In-Battle Consumables</h2>
+    </div>
+    <div class="prose">
+      <p class="reveal">Consumables are special items purchased from the <span class="term">Cinder Shop</span> (covered later in this guide). Each can only be used <strong>once per battle</strong>. Before a match, you may equip up to <strong>four</strong> consumables on your Hero — choosing the right ones can provide powerful advantages, whether you need healing, extra resources, defensive boosts, or other battlefield benefits.</p>
+    </div>
+    <div class="spacer" style="height:26px"></div>
+    <div class="reveal d1">
+      <div class="consum">
+        <div class="slot">Empty</div><div class="slot">Empty</div><div class="slot">Empty</div><div class="slot">Empty</div>
+      </div>
+      <p class="consum-cap">4 consumable slots · equip before the match</p>
+    </div>
+    <div class="note reveal">
+      <span class="k">Weigh the Risk</span>
+      Consumables come with risk: if your Hero is defeated, any consumables you brought in are <strong>lost</strong>. Consider carefully whether a mission's rewards are worth bringing your most valuable items. The right item at the right moment can turn the tide — but losing it can be costly.
+    </div>
+  </div>
+</section>
+
+<nav class="pnav">
+  <a class="prev" href="choose-your-path.html"><span class="dir">← Chapter One</span><span class="t">Choose Your Path</span></a>
+  <a class="next" href="kalon-source.html"><span class="dir">Chapter Three →</span><span class="t">Kalon Source &amp; Energy</span></a>
+</nav>
+
+<footer class="foot">Mythic Spellbook · Player Guide — updated as the world grows</footer>
+
+<script src="../js/guide.js"></script>
+<script>
+  // build 5x5 placement board
+  (function(){
+    var b=document.getElementById('board5');if(!b)return;
+    for(var r=0;r<5;r++)for(var c=0;c<5;c++){
+      var d=document.createElement('div');d.className='cell';
+      var dist=Math.max(Math.abs(r-2),Math.abs(c-2));
+      if(dist===0)d.className='cell hero';
+      else if(dist===1)d.className='cell r1';
+      else if(dist===2)d.className='cell r2';
+      b.appendChild(d);
+    }
+  })();
+</script>
+</body>
+</html>

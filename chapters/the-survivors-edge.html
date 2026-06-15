@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Survivor's Edge — Mythic Spellbook Player Guide</title>
+<link rel="stylesheet" href="../css/guide.css">
+<style>
+  .topnav a.cur{color:var(--text);background:rgba(168,125,255,.14)}
+  .sec-head{max-width:var(--read);margin:0 auto 26px}
+  .sec-head h2{font-size:clamp(1.6rem,3.6vw,2.3rem);color:#fff;margin-bottom:10px}
+  .sec-head .eyebrow{margin-bottom:14px}
+
+  /* breadcrumb path */
+  .pathline{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center;max-width:var(--read);margin:0 auto 6px}
+  .pathline .step{display:flex;align-items:center;gap:10px;padding:12px 18px;border-radius:12px;border:1px solid var(--line-2);
+    background:linear-gradient(180deg,var(--surface-2),var(--surface));font-family:'Oswald',sans-serif;text-transform:uppercase;
+    letter-spacing:.14em;font-size:.74rem;color:var(--text)}
+  .pathline .step.dest{border-color:var(--ember);color:var(--ember-soft);background:rgba(255,122,60,.08)}
+  .pathline .arr{color:var(--faint);font-size:1.2rem}
+
+  /* equipment grid */
+  .equip{display:grid;grid-template-columns:repeat(5,1fr);gap:15px;max-width:var(--maxw);margin:30px auto 0}
+  @media(max-width:860px){.equip{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:520px){.equip{grid-template-columns:repeat(2,1fr)}}
+  .eq{border:1px solid var(--line);border-radius:16px;padding:24px 20px;text-align:center;
+    background:linear-gradient(180deg,var(--surface-2),var(--surface));transition:transform .35s var(--ease),border-color .35s,box-shadow .35s}
+  .eq:hover{transform:translateY(-6px);border-color:rgba(255,122,60,.4);box-shadow:0 30px 60px -30px rgba(255,122,60,.4)}
+  .eq .mono{width:54px;height:54px;margin:0 auto 14px;border-radius:14px;display:grid;place-items:center;
+    font-family:'Cinzel',serif;font-weight:800;font-size:1.4rem;color:#fff;
+    background:radial-gradient(circle at 40% 32%,rgba(255,176,133,.9),var(--ember) 55%,var(--ember-deep));
+    box-shadow:0 0 22px var(--ember-glow)}
+  .eq h4{font-family:'Cinzel',serif;font-weight:700;font-size:1.04rem;color:#fff;margin:0 0 6px}
+  .eq p{margin:0;color:var(--muted);font-size:.86rem;line-height:1.45}
+
+  /* tombstone + loot */
+  .loot-feature{display:grid;grid-template-columns:250px 1fr;gap:44px;align-items:center;max-width:var(--maxw);margin:0 auto}
+  @media(max-width:720px){.loot-feature{grid-template-columns:1fr;justify-items:center;text-align:center}}
+  .tomb{width:100%;max-width:250px;position:relative;display:grid;place-items:center;padding:10px 8px 4px;border-radius:18px;
+    background:radial-gradient(circle at 50% 40%,rgba(168,125,255,.24),transparent 64%)}
+  .tomb img{width:100%;display:block;position:relative;z-index:1;
+    filter:drop-shadow(0 0 30px rgba(168,125,255,.42)) drop-shadow(0 18px 24px rgba(0,0,0,.55))}
+  .tomb::after{content:"";position:absolute;left:50%;bottom:6px;width:66%;height:20px;transform:translateX(-50%);
+    background:radial-gradient(ellipse,var(--arcane-glow),transparent 72%);filter:blur(5px);z-index:0}
+  .loot-meta .ctype{display:inline-block;font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.18em;
+    font-size:.66rem;color:var(--arcane-soft);border:1px solid rgba(168,125,255,.4);padding:5px 13px;border-radius:999px;margin-bottom:16px}
+  .loot-meta h3{font-family:'Cinzel',serif;font-weight:800;font-size:clamp(1.5rem,3.4vw,2.1rem);color:#fff;margin:0 0 16px;line-height:1.06}
+  .loot-meta p{color:#cfc7d6;font-size:1.05rem;line-height:1.64;margin:0 0 14px;max-width:520px}
+  @media(max-width:720px){.loot-meta p{margin-inline:auto}}
+
+  /* loot tiers */
+  .tiers{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:6px}
+  @media(max-width:720px){.tiers{justify-content:center}}
+  .tiers .tier{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:.66rem;
+    padding:7px 13px;border-radius:999px;border:1px solid var(--line-2);color:var(--muted);background:rgba(255,255,255,.02)}
+  .tiers .tier.r{color:var(--gold);border-color:rgba(227,183,101,.45);background:rgba(227,183,101,.08)}
+  .tiers .grow{color:var(--faint)}
+
+  /* six methods + risk spectrum */
+  .methods{display:grid;grid-template-columns:auto 1fr;gap:34px;align-items:center;max-width:var(--maxw);margin:0 auto;
+    padding:36px clamp(22px,4vw,42px);border-radius:22px;border:1px solid var(--line);box-shadow:var(--shadow);
+    background:radial-gradient(120% 90% at 0% 0%,rgba(168,125,255,.12),transparent 60%),linear-gradient(180deg,var(--surface-2),var(--surface))}
+  @media(max-width:680px){.methods{grid-template-columns:1fr;text-align:center;justify-items:center}}
+  .methods .big6{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(4rem,12vw,7rem);line-height:.8;
+    color:transparent;-webkit-text-stroke:2px var(--arcane);text-shadow:0 0 40px var(--arcane-glow)}
+  .methods .m6lab{display:block;font-family:'Oswald',sans-serif;-webkit-text-stroke:0;color:var(--arcane-soft);
+    text-transform:uppercase;letter-spacing:.2em;font-size:.62rem;margin-top:10px}
+  .spectrum{width:100%}
+  .spectrum .track{height:12px;border-radius:999px;background:linear-gradient(90deg,#3f8e5e,var(--gold),var(--ember-deep))}
+  .spectrum .ends{display:flex;justify-content:space-between;margin-top:12px;gap:14px}
+  .spectrum .ends div{font-size:.94rem;color:var(--muted);max-width:46%}
+  .spectrum .ends b{display:block;font-family:'Cinzel',serif;color:#fff;font-weight:600;margin-bottom:3px;font-size:.98rem}
+  .spectrum .ends .hi{text-align:right}
+
+  /* 36-item bag */
+  .bag{max-width:var(--read);margin:0 auto}
+  .bag .grid36{display:grid;grid-template-columns:repeat(12,1fr);gap:7px}
+  @media(max-width:560px){.bag .grid36{grid-template-columns:repeat(9,1fr)}}
+  .bag .cell{aspect-ratio:1;border-radius:6px;border:1px solid var(--line-2);background:rgba(255,255,255,.02)}
+  .bag .cap{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
+  .bag .cap .n{font-family:'Cinzel',serif;font-weight:800;font-size:1.3rem;color:#fff}
+  .bag .cap .n b{color:var(--ember-soft)}
+  .bag .cap .t{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.16em;font-size:.64rem;color:var(--faint)}
+</style>
+</head>
+<body>
+<div class="progress"></div>
+
+<header class="topbar"><div class="inner">
+  <a class="brand" href="../index.html"><span class="sigil"></span><span>Mythic Spellbook<small>Player Guide</small></span></a>
+  <nav class="topnav">
+    <a class="home" href="../index.html">Contents</a>
+    <a class="lbl" href="choose-your-path.html">01 · Path</a>
+    <a class="lbl" href="the-heroes.html">02 · Heroes</a>
+    <a class="lbl" href="kalon-source.html">03 · Kalon</a>
+    <a class="lbl" href="build-your-collection.html">04 · Cards</a>
+    <a class="lbl" href="the-living-world.html">05 · World</a>
+    <a class="cur lbl" href="the-survivors-edge.html">06 · Survival</a>
+  </nav>
+</div></header>
+
+<header class="phead">
+  <div class="wrap">
+    <div class="num">06</div>
+    <p class="eyebrow">Chapter Six</p>
+    <h1>The Survivor's Edge</h1>
+    <p class="sub">Prepare your Hero before the fight — then claim the spoils after it. Loadouts and looting are where good survivors become great.</p>
+    <div class="glowline"></div>
+  </div>
+</header>
+
+<!-- INTRO -->
+<section>
+  <div class="wrap">
+    <div class="prose">
+      <p class="lead reveal">Mythic Spellbook takes the card-game genre to the next level: a world where <em>no two survivors</em> are likely to share the exact same experience. Nearly everything in the game carries value, and every choice matters — especially in a player-driven economy where progression, resources, and customization all play meaningful roles.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+<div class="spacer"></div>
+
+<!-- LOADOUTS -->
+<section>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Preparation</p>
+      <h2>Hero Customization &amp; Loadouts</h2>
+      <p class="muted" style="margin-top:8px">Your Hero is far more than a leader on the battlefield — the way you customize them can completely change how you play.</p>
+    </div>
+    <div class="prose">
+      <p class="reveal">Survivors can find, craft, trade, or purchase equipment and consumables through the <span class="term">Cinder Shop</span>, then use them to outfit their Hero for the dangers ahead. To access your gear, open the <strong>Deck Builder</strong> and select the <strong>Hero Loadout</strong> button.</p>
+    </div>
+    <div class="spacer" style="height:26px"></div>
+    <div class="pathline reveal d1">
+      <span class="step">Deck Builder</span>
+      <span class="arr">→</span>
+      <span class="step dest">Hero Loadout</span>
+    </div>
+    <div class="equip reveal d1">
+      <div class="eq"><div class="mono">W</div><h4>Weapons</h4><p>Raise your damage output and reach.</p></div>
+      <div class="eq"><div class="mono">A</div><h4>Armor</h4><p>Strengthen defenses and survivability.</p></div>
+      <div class="eq"><div class="mono">G</div><h4>Grenades</h4><p>Burst utility for the right moment.</p></div>
+      <div class="eq"><div class="mono">C</div><h4>Consumables</h4><p>Single-use healing, resources &amp; boosts.</p></div>
+      <div class="eq"><div class="mono">S</div><h4>Special Equipment</h4><p>Unique effects to complement your strategy.</p></div>
+    </div>
+    <div class="note reveal">
+      <span class="k">Preparation Wins Battles</span>
+      Each piece of gear can grant stat bonuses, unique effects, or tactical advantages. A battle that once seemed unwinnable can become manageable with the right loadout — whether you're facing another player, completing a mission, fighting powerful AI, or surviving a <strong>Roguelite Campaign</strong>. The strongest survivors aren't the ones with the rarest cards; they're the ones who know how to build their Hero.
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+<div class="spacer"></div>
+
+<!-- LOOTING -->
+<section>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow arc">The Spoils</p>
+      <h2>Looting</h2>
+      <p class="muted" style="margin-top:8px">When a Unit is defeated, it leaves behind a Tombstone — and an opportunity for survivors willing to take the risk.</p>
+    </div>
+    <div class="loot-feature reveal d1">
+      <div class="tomb"><img src="../assets/tombstone.png" alt="A fallen survivor's tombstone"></div>
+      <div class="loot-meta">
+        <span class="ctype">Tombstone · Risk &amp; Reward</span>
+        <h3>Claim What the Fallen Leave Behind</h3>
+        <p>Tombstones mark the remains of fallen allies and enemies. Interact with one to recover resources, materials, and other rewards that strengthen your camp, fuel your economy, and expand your deckbuilding options. Controlling the areas where Tombstones fall can become a winning strategy all its own.</p>
+        <p>Not every Tombstone holds the same prize. Rewards range from common resources to far rarer finds:</p>
+        <div class="tiers">
+          <span class="tier">Common resources</span>
+          <span class="grow">→</span>
+          <span class="tier r">Rare materials</span>
+          <span class="tier r">Crafting components</span>
+          <span class="tier r">Consumables</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="spacer"></div>
+
+    <div class="methods reveal">
+      <div class="big6">6<span class="m6lab">Ways to Loot</span></div>
+      <div class="spectrum">
+        <div class="track"></div>
+        <div class="ends">
+          <div><b>Safer, smaller</b>Lower-risk methods secure modest rewards.</div>
+          <div class="hi"><b>Greater payout</b>Bigger hauls at the cost of danger or resource investment.</div>
+        </div>
+      </div>
+    </div>
+    <div class="prose">
+      <p class="reveal" style="margin-top:34px">Knowing when to secure a Tombstone, when to leave it alone, and which of the six methods to use can shape both your battlefield success and your camp's long-term growth. Sometimes the resources recovered from fallen units are <em>just as valuable as winning the battle itself</em>.</p>
+    </div>
+
+    <div class="spacer" style="height:30px"></div>
+
+    <div class="bag reveal d1">
+      <div class="cap">
+        <span class="n"><b>0</b> / 36</span>
+        <span class="t">Starter Bag Capacity</span>
+      </div>
+      <div class="grid36" id="grid36"></div>
+    </div>
+    <div class="note arc reveal">
+      <span class="k">Mind Your Pack</span>
+      Every player starts with a bag that carries only <strong>36 items</strong>. After each match or run, you'll want to head back to camp and bank the resources you've earned — before a defeat or a full pack costs you the spoils.
+    </div>
+  </div>
+</section>
+
+<nav class="pnav">
+  <a class="prev" href="the-living-world.html"><span class="dir">← Chapter Five</span><span class="t">The Living World</span></a>
+  <a class="next" href="../index.html"><span class="dir">Return to →</span><span class="t">Contents</span></a>
+</nav>
+
+<footer class="foot">Mythic Spellbook · Player Guide — updated as the world grows</footer>
+
+<script src="../js/guide.js"></script>
+<script>
+  (function(){
+    var g=document.getElementById('grid36');if(!g)return;
+    for(var i=0;i<36;i++){var d=document.createElement('div');d.className='cell';g.appendChild(d);}
+  })();
+</script>
+</body>
+</html>
