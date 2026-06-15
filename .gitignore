@@ -1,0 +1,19 @@
+# Claude / editor
+.claude/
+
+# Dev/build scripts (not needed for static hosting)
+*.py
+*.cjs
+
+# Backend schema (not deployed with static site)
+*.sql
+
+# Card export dumps
+Assets/Card Exports/
+
+# Source HTML kept locally; index.html is the deployed copy
+humanity-contained.html
+
+# OS junk
+Thumbs.db
+.DS_Store
